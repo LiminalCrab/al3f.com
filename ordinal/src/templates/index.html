@@ -23,11 +23,11 @@
         </nav>
     </header>
     <section class="page-details">
-        <h2 class="page-title">{{ page_title | default('The Infinite Archive') }}</h2>
-        <p class="page-description">{{ page_description | default('Formless and empty') }}</p>
+        <h2 class="page-title">{{ title }}</h2>
+        <p class="page-description">{{ description }}</p>
         <p class="page-meta">
             {% for meta in page_meta %}
-            <a href="{{ meta.url }}" class="meta-link {{ meta.class }}">{{ meta.label }}</a>
+            <a href="{{ meta.url }}" class="meta-link {{ meta.class }}">{{ meta.label }}: {{ meta.value }}</a>
             {% endfor %}
         </p>
     </section>
