@@ -32,22 +32,18 @@
         </p>
     </section>
     <main>
+        {% for article in articles %}
         <article>
             <header>
-                <h2>{{ article_title | default('Introduction') }}</h2>
+                {{ article.header | safe }}
             </header>
             <section>
-                {% for paragraph in content_paragraphs %}
-                <p>{{ paragraph }}</p>
-                {% endfor %}
-            </section>
-            <section>
-                <h2>{{ about_title | default('About Me') }}</h2>
-                {% for paragraph in about_paragraphs %}
-                <p>{{ paragraph }}</p>
+                {% for section in article.sections %}
+                <p>{{ section | safe }}</p>
                 {% endfor %}
             </section>
         </article>
+        {% endfor %}
     </main>
     <aside>
         <ol class="footnote">

@@ -7,6 +7,8 @@ from datetime import datetime
 from typing import List, Dict, Optional
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 import mistune
+import yaml
+import re
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 content_dir = os.path.join(base_dir, "content")
@@ -31,16 +33,52 @@ def ensure_directory(path: str) -> None:
     os.makedirs(path, exist_ok=True)
 
 
-def convert_markdown(md_fp: str) -> str:
+def markdown_output(md_fp: str) -> None:
+    try:
+        with open(md_fp, "r", encoding="utf-8") as f:
+            markdown_content = f.read()
+
+        html_content = mistune.create_markdown()(markdown_content)
+
+        log_file = "markdown_output.log"
+        with open(log_file, "w", encoding="utf-8") as log:
+            log.write("=== Raw Markdown Content ===\n")
+            log.write(markdown_content)
+            log.write("\n\n=== Converted HTML Content ===\n")
+            log.write(html_content)
+
+        logging.info(f"Markdown output logged to {log_file}")
+
+    except Exception as err:
+        logging.error(f"Error logging Markdown output from {md_fp}: {err}")
+
+
+# def convert_markdown(md_fp: str) -> str:
+#     with open(md_fp, "r", encoding="utf-8") as f:
+#         markdown_content = f.read()
+#     return mistune.create_markdown()(markdown_content)
+
+
+def parse_frontmatter(md_fp: str) -> Dict[str, str]:
     with open(md_fp, "r", encoding="utf-8") as f:
-        markdown_content = f.read()
-    return mistune.create_markdown()(markdown_content)
+        md_content = f.read()
+
+    frontmatter_match = re.match(r"---\n(.*?)\n---\n(.*)", md_content, re.S)
+    if frontmatter_match:
+        frontmatter = yaml.safe_load(frontmatter_match.group(1))
+        content = frontmatter_match.group(2)
+    else:
+        frontmatter = {}
+        content = md_content
+
+    content_html = mistune.create_markdown()(content)
+    return {"frontmatter": frontmatter, "content": content_html}
 
 
-def render_template(template_name: str, content: str) -> str:
+def render_template_context(template_name: str, context: Dict[str, str]) -> str:
     try:
         template = env.get_template(template_name)
-        return template.render(content=content)
+        return template.render(**context)
     except TemplateNotFound as err:
         logging.error(f"Template not found: {err}")
         raise
@@ -48,14 +86,67 @@ def render_template(template_name: str, content: str) -> str:
 
 def process_file(md_fp: str, output_fp: str, template_name: str) -> None:
     try:
-        html_content = convert_markdown(md_fp)
-        rendered_html = render_template(template_name, html_content)
+        parsed_data = parse_frontmatter(md_fp)
+        frontmatter = parsed_data.get("frontmatter", {})
+        content = parsed_data.get("content", "")
+
+        articles = []
+        current_article = None
+
+        lines = content.splitlines()
+        for line in lines:
+            line = line.strip()
+            if line.startswith("<h2>") and line.endswith("</h2>"):
+                if current_article:
+                    articles.append(current_article)
+                current_article = {
+                    "header": line,
+                    "sections": [],
+                }
+            elif current_article:
+                current_article["sections"].append(line)
+
+            if current_article:
+                articles.append(current_article)
+        context = {
+            "title": frontmatter.get("title", "Default Title"),
+            "description": frontmatter.get("description", "Default Description"),
+            "page_meta": [
+                {
+                    "label": "Division",
+                    "class": "division",
+                    "url": "#",
+                    "value": frontmatter.get("division", []),
+                },
+                {
+                    "label": "Domain",
+                    "class": "domain",
+                    "url": "#",
+                    "value": frontmatter.get("domain"),
+                },
+                {
+                    "label": "Worked",
+                    "class": "worked",
+                    "url": "#",
+                    "value": frontmatter.get("worked"),
+                },
+                {
+                    "label": "Last Modified",
+                    "class": "last-modified",
+                    "url": "#",
+                    "value": frontmatter.get("last_modified"),
+                },
+            ],
+            "articles": articles,
+        }
+
+        rendered_html = render_template_context(template_name, context)
         ensure_directory(os.path.dirname(output_fp))
         with open(output_fp, "w", encoding="utf-8") as f:
             f.write(rendered_html)
         logging.info(f"Generated: {output_fp}")
     except Exception as err:
-        logging.error(f"Error processing file {md_fp}: {err}")
+        logging.error(f"Error processing file: {md_fp}: {err}")
 
 
 def process_index() -> None:
@@ -66,6 +157,9 @@ def process_index() -> None:
     if not os.path.exists(index_md_fp):
         logging.error(f"`index.md` file does not exist at: {index_md_fp}")
         return
+
+    # debugging
+    markdown_output(index_md_fp)
 
     try:
         process_file(index_md_fp, index_output_fp, index_template)
@@ -234,7 +328,6 @@ def setup() -> None:
         except Exception as err:
             logging.error(f"Error creating directory:{dir}: {err}")
 
-    # some place holder files
     required_dirs = [content_dir, templates_dir, public_dir, snapshots_dir]
     for category in ["articles", "notes"]:
         required_dirs.append(os.path.join(content_dir, category))
