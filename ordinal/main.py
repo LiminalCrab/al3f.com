@@ -65,14 +65,37 @@ def markdown_output(md_fp: str) -> None:
 #     with open(md_fp, "r", encoding="utf-8") as f:
 #         markdown_content = f.read()
 #     return mistune.create_markdown()(markdown_content)
+backlinks = {}
+
+
+def parse_backlink(source: str, target: str) -> None:
+    target_page = target.replace(" ", "-").tolower()
+    if target_page not in backlinks:
+        backlinks[target_page] = []
+    backlinks[target_page].append(source)
+
+
+def parse_wikilinks(text: str) -> str:
+    try:
+        pattern = r"\[\[(.*?)\]\]"
+
+        def replace_link(match):
+            link_text = match.group(1)
+            slug = link_text.replace(" ", "-").lower()
+            return f'<a href="/{slug}.html">{link_text}</a>'
+
+        return re.sub(pattern, replace_link, text)
+    except Exception as err:
+        logging.error(f"Error parsing wikilinks in text: {err}")
+        return text
 
 
 def parse_articles(md_content: str) -> List[Dict[str, Any]]:
-    try:
-        articles = []
-        lines = md_content.split("\n")
-        current_article = None
+    articles = []
+    lines = md_content.split("\n")
+    current_article = None
 
+    try:
         for line in lines:
             if line.startswith("## "):
                 if current_article:
@@ -82,15 +105,14 @@ def parse_articles(md_content: str) -> List[Dict[str, Any]]:
                     "sections": [],
                 }
             elif current_article and line.strip():
-                current_article["sections"].append(line.strip())
+                processed_line = parse_wikilinks(line.strip())
+                current_article["sections"].append(processed_line)
 
         if current_article:
             articles.append(current_article)
-
-        return articles
     except Exception as err:
         logging.error(f"Error parsing articles: {err}")
-        return []
+    return articles
 
 
 def parse_frontmatter(md_fp: str) -> Dict[str, Any]:
@@ -133,9 +155,13 @@ def process_file(md_fp: str, output_fp: str, template_name: str) -> None:
         parsed_data = parse_frontmatter(md_fp)
         frontmatter = parsed_data.get("frontmatter", {})
         articles = parsed_data.get("articles", [])
+        page_name = os.path.splitext(os.path.basename(md_fp))[0]
 
-        logging.info("Frontmatter Data: %s", json.dumps(frontmatter, indent=4))
-        logging.info("Parsed Articles Data: %s", json.dumps(articles, indent=4))
+        for article in articles:
+            print(article)
+            article["sections"] = [
+                parse_wikilinks(page_name, section) for section in article["sections"]
+            ]
 
         context = {
             "title": frontmatter.get("title", "Default Title"),
@@ -167,6 +193,7 @@ def process_file(md_fp: str, output_fp: str, template_name: str) -> None:
                 },
             ],
             "articles": articles,
+            "backlinks": backlinks.get(page_name, []),
         }
 
         logging.info("Rendering with context: %s", json.dumps(context, indent=4))
