@@ -10,8 +10,7 @@ venv/
 .vscode/
 .DS_Store
 Thumbs.db
-public/
-ordinal/snapshots/
+ordinal/snapshots/*
 dist/
 build/
 *.tmp
@@ -20,7 +19,5 @@ build/
 *.sw~
 *.swo
 *~
-public/styles/main.css
-public/styles/main.css.map
 main.log
 ordinal/ordinal/snapshots/*
