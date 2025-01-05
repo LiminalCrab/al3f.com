@@ -1,7 +1,6 @@
 import os
 import argparse
 import logging
-import difflib
 import shutil
 from datetime import datetime
 from typing import List, Dict, Optional, Any
@@ -17,7 +16,8 @@ content_dir = os.path.join(base_dir, "content")
 templates_dir = os.path.join(base_dir, "src", "templates")
 public_dir = os.path.join(base_dir, "public")
 snapshots_dir = os.path.join(base_dir, "snapshots")
-
+backlinks = {}
+# external_links = {}
 
 env = Environment(loader=FileSystemLoader(templates_dir))
 
@@ -65,23 +65,44 @@ def markdown_output(md_fp: str) -> None:
 #     with open(md_fp, "r", encoding="utf-8") as f:
 #         markdown_content = f.read()
 #     return mistune.create_markdown()(markdown_content)
-backlinks = {}
+
+
+def parse_external_links(text: str) -> str:
+    try:
+        pattern = r"\[(.*?)\]\((https?://.*?)\)"
+
+        def replace_link(match):
+            link_text = match.group(1)
+            url = match.group(2)
+            return f'<a href="{url}" target="_blank">{link_text}</a>'
+
+        return re.sub(pattern, replace_link, text)
+    except Exception as err:
+        logging.error(f"Error parsing external links in text: {err}")
+        return text
 
 
 def parse_backlink(source: str, target: str) -> None:
-    target_page = target.replace(" ", "-").tolower()
-    if target_page not in backlinks:
-        backlinks[target_page] = []
-    backlinks[target_page].append(source)
+    try:
+        target_page = target.replace(" ", "-").lower()
+        logging.info(f"Backlinks target: {target}, normalized to: {target_page}")
+        if target_page not in backlinks:
+            backlinks[target_page] = []
+        backlinks[target_page].append(source)
+        logging.info(f"Backlinks for {target_page}: {backlinks[target_page]}")
+    except Exception as err:
+        logging.error(f"Error parsing backlink from '{source}' to '{target}': {err}")
 
 
-def parse_wikilinks(text: str) -> str:
+def parse_wikilinks(source_page: str, text: str) -> str:
     try:
         pattern = r"\[\[(.*?)\]\]"
 
         def replace_link(match):
             link_text = match.group(1)
             slug = link_text.replace(" ", "-").lower()
+            logging.info(f"Backlinks source: {source_page}, link text: {link_text}")
+            parse_backlink(source_page, link_text)
             return f'<a href="/{slug}.html">{link_text}</a>'
 
         return re.sub(pattern, replace_link, text)
@@ -90,7 +111,7 @@ def parse_wikilinks(text: str) -> str:
         return text
 
 
-def parse_articles(md_content: str) -> List[Dict[str, Any]]:
+def parse_articles(md_content: str, page_name: str) -> List[Dict[str, Any]]:
     articles = []
     lines = md_content.split("\n")
     current_article = None
@@ -105,8 +126,9 @@ def parse_articles(md_content: str) -> List[Dict[str, Any]]:
                     "sections": [],
                 }
             elif current_article and line.strip():
-                processed_line = parse_wikilinks(line.strip())
-                current_article["sections"].append(processed_line)
+                processed_intlink = parse_wikilinks(page_name, line.strip())
+                processed_exlink = parse_external_links(processed_intlink)
+                current_article["sections"].append(processed_exlink)
 
         if current_article:
             articles.append(current_article)
@@ -132,7 +154,8 @@ def parse_frontmatter(md_fp: str) -> Dict[str, Any]:
             if key in frontmatter and isinstance(frontmatter[key], (datetime, str)):
                 frontmatter[key] = str(frontmatter[key])
 
-        articles = parse_articles(content)
+        page_name = os.path.splitext(os.path.basename(md_fp))[0]
+        articles = parse_articles(content, page_name)
         return {"frontmatter": frontmatter, "articles": articles}
     except Exception as err:
         logging.error(f"Error parsing frontmatter in file {md_fp}: {err}")
@@ -155,13 +178,17 @@ def process_file(md_fp: str, output_fp: str, template_name: str) -> None:
         parsed_data = parse_frontmatter(md_fp)
         frontmatter = parsed_data.get("frontmatter", {})
         articles = parsed_data.get("articles", [])
-        page_name = os.path.splitext(os.path.basename(md_fp))[0]
+        page_name = (
+            os.path.splitext(os.path.basename(md_fp))[0].replace(" ", "-").lower()
+        )
 
         for article in articles:
-            print(article)
             article["sections"] = [
                 parse_wikilinks(page_name, section) for section in article["sections"]
             ]
+
+        logging.info(f"Page name: {page_name}")
+        logging.info(f"Backlinks dictionary: {json.dumps(backlinks, indent=4)}")
 
         context = {
             "title": frontmatter.get("title", "Default Title"),
@@ -193,11 +220,19 @@ def process_file(md_fp: str, output_fp: str, template_name: str) -> None:
                 },
             ],
             "articles": articles,
-            "backlinks": backlinks.get(page_name, []),
+            "backlinks": backlinks,
         }
 
-        logging.info("Rendering with context: %s", json.dumps(context, indent=4))
+        logging.info(f"Rendering with context: {json.dumps(context, indent=4)}")
+        rendered_html = render_template_context(template_name, context)
+        ensure_directory(os.path.dirname(output_fp))
+        with open(output_fp, "w", encoding="utf-8") as f:
+            f.write(rendered_html)
+        logging.info(f"Generated: {output_fp}")
+    except Exception as err:
+        logging.error(f"Error processing file {md_fp}: {err}")
 
+        logging.info(f"Rendering with context: {json.dumps(context, indent=4)}")
         rendered_html = render_template_context(template_name, context)
         ensure_directory(os.path.dirname(output_fp))
         with open(output_fp, "w", encoding="utf-8") as f:

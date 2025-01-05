@@ -60,7 +60,7 @@
         <h3>Backlinks</h3>
         <ul>
             {% for backlink in backlinks %}
-            <li><a href="/{{ backlink | replace(' ', '-').lower() }}.html">{{ backlink }}</a></li>
+            <li><a href="/{{ backlink | replace(' ', '-') | lower }}.html">{{ backlink }}</a></li>
             {% endfor %}
         </ul>
     </section>

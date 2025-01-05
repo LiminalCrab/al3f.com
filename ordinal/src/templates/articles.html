@@ -60,7 +60,21 @@
         <h3>Backlinks</h3>
         <ul>
             {% for backlink in backlinks %}
-            <li><a href="/{{ backlink | replace(' ', '-').lower() }}.html">{{ backlink }}</a></li>
+            <li><a href="/{{ backlink | replace(' ', '-') | lower }}.html">{{ backlink }}</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% else %}
+    <section class="backlinks">
+        <h3>No backlinks found for this page.</h3>
+    </section>
+    {% endif %}
+    {% if external_links %}
+    <section class="external-links">
+        <h3>External Links</h3>
+        <ul>
+            {% for link in external_links %}
+            <li><a href="{{ link.url }}" target="_blank">{{ link.text }}</a></li>
             {% endfor %}
         </ul>
     </section>
