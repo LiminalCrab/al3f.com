@@ -9,7 +9,7 @@ created: "2025-01-01"
 ---
 
 ## Introduction
-This space is an archive of my [[creations]], the [[places]] I've been, and the [[experiences]] that have shaped me.
+This space is an archive of my [[creations]], the [[places]] I've been, and the [[experiences]] that have shaped me. View my [[articles]]
 
 It's a home for reflections, creative experiments, and curated notes. Here, I collect fragments of thought, track ongoing projects, and preserve moments that might otherwise fade with time.
 
