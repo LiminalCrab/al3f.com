@@ -97,6 +97,61 @@ def markdown_output(md_fp: str, backlinks: Dict[str, List[str]]) -> None:
 #     return mistune.create_markdown()(markdown_content)
 
 
+def generate_missing() -> None:
+    template_fp = os.path.join(base_dir, "src", "templates", "template.md")
+    try:
+        if not os.path.exists(template_fp):
+            logging.error(f"Template file not found: {template_fp}")
+            return
+
+        with open(tem, "r", encoding="utf-8") as template_file:
+            template_content = template_file.read()
+
+        for root, _, files in os.walk(content_dir):
+            for file in files:
+                if file.endswith(".md"):
+                    md_fp = os.path.join(root, file)
+                    with open(md_fp, "r", encoding="utf-8") as f:
+                        markdown_content = f.read()
+
+                    pattern = r"\[\[(.*?)\]\]"
+                    wikilinks = re.findall(pattern, markdown_content)
+
+                    if wikilinks:
+                        parent_dir = os.path.basename(os.path.dirname(md_fp))
+                        default_category = "articles"
+                        category = (
+                            parent_dir if parent_dir != "content" else default_category
+                        )
+                        category_dir = os.path.join(content_dir, category)
+
+                        ensure_directory(category_dir)
+
+                        for link in wikilinks:
+                            filename = f"{link.replace(' ', '-').lower()}.md"
+                            filepath = os.path.join(category_dir, filename)
+
+                            if not os.path.exists(filepath):
+                                title = link.title()
+                                frontmatter = template_content.format(
+                                    title=title,
+                                    created=datetime.now().strftime(
+                                        "%Y-%m-%d %H:%M:%S"
+                                    ),
+                                    last_modified=datetime.now().strftime(
+                                        "%Y-%m-%d %H:%M:%S"
+                                    ),
+                                )
+                                with open(filepath, "w", encoding="utf-8") as new_file:
+                                    new_file.write(frontmatter)
+                                logging.info(f"Created missing file: {filepath}")
+                            else:
+                                logging.info(f"File already exists: {filepath}")
+
+    except Exception as err:
+        logging.error(f"Error during generate_missing: {err}")
+
+
 def kill_orphans(content_dir: str, public_dir: str) -> None:
     """
     This deletes HTML files if the corresponding markdown files no longer exists...
@@ -833,6 +888,7 @@ def main() -> None:
         setup()
 
     elif args.command == "generate":
+        generate_missing()
         if args.category == "all":
             for category in categories:
                 process_category(category)
