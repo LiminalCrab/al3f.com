@@ -26,8 +26,8 @@
         <p class="page-description">{{ description }}</p>
         <p class="page-meta">
             {% for meta in page_meta %}
-            <a href="{{ meta.url | default('#') }}" class="meta-link {{ meta.class | default('default-class') }}">
-                {% endfor %}
+            <a href="{{ meta.url }}" class="meta-link {{ meta.class }}">{{ meta.label }}: {{ meta.value }}</a>
+            {% endfor %}
         </p>
     </section>
     <main>
@@ -60,6 +60,18 @@
         <ul>
             {% for backlink in backlinks %}
             <li><a href="/{{ backlink | replace(' ', '-') | lower }}.html">{{ backlink }}</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+    {% if related_articles %}
+    <section class="related-articles">
+        <h2>Related Articles</h2>
+        <ul>
+            {% for article in related_articles %}
+            <li>
+                <a href="{{ article['url'] }}">{{ article['title'] }}</a>
+            </li>
             {% endfor %}
         </ul>
     </section>
