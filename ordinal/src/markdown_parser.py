@@ -91,20 +91,35 @@ def parse_external_links(text: str) -> str:
         return text
 
 
-def parse_articles(md_content: str, page_name: str, backlinks: Dict[str, List[str]]) -> List[Dict[str, Any]]:
+def parse_articles(md_content: str, page_name: str, backlinks: Dict[str, List[str]]) -> dict:
     articles = []
-    lines = md_content.split("\n")
     current_article = None
+    footnotes = {}
+    toc = []
 
     try:
-        for line in lines:
+        processed_content, footnotes = parse_footnotes(md_content)
+
+        for line in processed_content.split("\n"):
             if line.startswith("## "):
+                heading_text = line[3:].strip()
+                anchor = heading_text.replace(" ", "-").lower()
+                toc.append({"text": heading_text, "anchor": anchor, "level": 2})
+                line = f'<h2 id="{anchor}">{heading_text}</h2>'
+
                 if current_article:
                     articles.append(current_article)
-                current_article = {
-                    "header": f"<h2>{line[3:].strip()}</h2>",
-                    "sections": [],
-                }
+                current_article = {"header": line, "sections": []}
+
+            elif line.startswith("### "):
+                heading_text = line[4:].strip()
+                anchor = heading_text.replace(" ", "-").lower()
+                toc.append({"text": heading_text, "anchor": anchor, "level": 3})
+                line = f'<h3 id="{anchor}">{heading_text}</h3>'
+
+                if current_article:
+                    current_article["sections"].append(line)
+
             elif current_article and line.strip():
                 processed_line = parse_wikilinks(page_name, line.strip(), backlinks)
                 processed_line = parse_external_links(processed_line)
@@ -112,9 +127,11 @@ def parse_articles(md_content: str, page_name: str, backlinks: Dict[str, List[st
 
         if current_article:
             articles.append(current_article)
+
     except Exception as err:
         logger.error(f"Error parsing articles: {err}")
-    return articles
+
+    return {"articles": articles, "footnotes": footnotes, "toc": toc}
 
 
 def parse_frontmatter(md_fp: str) -> Dict[str, Any]:
@@ -125,7 +142,7 @@ def parse_frontmatter(md_fp: str) -> Dict[str, Any]:
         frontmatter_match = re.match(r"---\n(.*?)\n---\n(.*)", md_content, re.S)
         if frontmatter_match:
             frontmatter = yaml.safe_load(frontmatter_match.group(1))
-            content = frontmatter_match.group(2)
+            content = frontmatter_match.group(2).strip()
         else:
             frontmatter = {}
             content = md_content
@@ -134,13 +151,35 @@ def parse_frontmatter(md_fp: str) -> Dict[str, Any]:
             if key in frontmatter and isinstance(frontmatter[key], (datetime, str)):
                 frontmatter[key] = str(frontmatter[key])
 
-        page_name = os.path.splitext(os.path.basename(md_fp))[0]
-        backlinks = {}
-        articles = parse_articles(content, page_name, backlinks)
-        return {"frontmatter": frontmatter, "articles": articles}
+        return {"frontmatter": frontmatter, "content": content}
     except Exception as err:
         logger.error(f"Error parsing frontmatter in file {md_fp}: {err}")
-        return {"frontmatter": {}, "articles": []}
+        return {"frontmatter": {}, "content": ""}
+
+
+def parse_footnotes(content: str):
+    try:
+        logger.info("Starting to extract footnotes.")
+
+        footnote_pattern = re.compile(r"\[\^(\d+)\]: (.+)")
+        footnotes = {match.group(1): match.group(2) for match in footnote_pattern.finditer(content)}
+        logger.info(f"Extracted footnotes: {footnotes}")
+
+        content = footnote_pattern.sub("", content)
+
+        footnote_ref_pattern = re.compile(r"\[\^(\d+)\]")
+
+        def replace_ref(match):
+            ref_id = match.group(1)
+            return f'<a href="#footnote-{ref_id}" id="ref-{ref_id}" class="footnote-ref">[^{ref_id}]</a>'
+
+        content = footnote_ref_pattern.sub(replace_ref, content)
+        logger.info("Replaced inline footnote references.")
+
+        return content.strip(), footnotes
+    except Exception as err:
+        logger.error(f"Error processing footnotes: {err}")
+        return content, {}
 
 
 def parse_related(frontmatter: dict) -> list[dict]:

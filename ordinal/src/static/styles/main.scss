@@ -4,18 +4,11 @@ $link-color: #e0e0e0;
 $link-hover-color: #000000;
 $link-hover-bg-color: #ffffff;
 
-$sidenote-color: #aaaaaa;
-$sidenote-bg-color: #111111;
-$sidenote-border-color: #666666;
-$sidenote-width: 40ch;
-$sidenote-spacing: 1rem;
-$sidenote-opacity: 0.85;
-
 $toc-bg-color: #111111;
 $toc-border-color: #ffffff;
 $toc-link-color: $link-color;
 $toc-link-hover-color: $link-hover-color;
-$toc-width: 15ch;
+$toc-width: 20ch;
 $toc-spacing: 1rem;
 $toc-text-color: #ffffff;
 
@@ -27,6 +20,13 @@ $page-title-font-size: 2.5rem;
 $page-meta-font-size: 0.85rem;
 
 $accent-color: #aaaaaa;
+
+$footnote-bg-color: $background-color;
+$footnote-border-color: $accent-color;
+$footnote-text-color: $text-color;
+$footnote-link-color: $link-color;
+$footnote-link-hover-color: $link-hover-color;
+$footnote-link-hover-bg-color: $link-hover-bg-color;
 
 * {
     margin: 0;
@@ -88,6 +88,54 @@ header#site-banner {
     }
 }
 
+.toc {
+    float: left;
+    width: $toc-width;
+    margin-right: $toc-spacing;
+    padding: $toc-spacing;
+    background-color: $toc-bg-color;
+    border: 1px solid $toc-border-color;
+    font-size: 0.875rem;
+    color: $toc-text-color;
+    height: auto;
+    overflow: visible;
+
+    h2 {
+        font-size: 1.25rem;
+        margin-bottom: $toc-spacing;
+        color: $text-color;
+        text-transform: uppercase;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        .toc-item {
+            margin-bottom: 0.5rem;
+
+            &.toc-level-2 {
+                font-weight: bold;
+            }
+
+            &.toc-level-3 {
+                padding-left: 1rem;
+            }
+
+            a {
+                color: $toc-link-color;
+                text-decoration: none;
+                border-bottom: 1px dotted $text-color;
+
+                &:hover {
+                    color: $toc-link-hover-color;
+                }
+            }
+        }
+    }
+}
+
 main {
     max-width: $content-max-width;
     margin: 0 auto;
@@ -105,46 +153,20 @@ main {
         margin-bottom: 2rem;
 
         header h2 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: $text-color;
+            text-align: left;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.25rem;
+            border-bottom: 1px solid $accent-color;
+            text-transform: uppercase;
         }
     }
 }
 
-
 section p {
     margin-bottom: 2rem;
-    position: relative;
-
-    .sidenote {
-        position: absolute;
-        right: calc(-1 * #{$sidenote-width} - #{$sidenote-spacing});
-        width: $sidenote-width;
-        font-size: 0.85rem;
-        color: $sidenote-color;
-        background-color: $sidenote-bg-color;
-        border-left: 2px solid $sidenote-border-color;
-        padding: 1rem;
-        margin-top: 2rem;
-        line-height: 1.5;
-        opacity: $sidenote-opacity;
-        transition: opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-
-        &:hover {
-            opacity: 1.0;
-            box-shadow: 0 0 10px $sidenote-border-color;
-            z-index: 3;
-        }
-
-        .sidenote-number {
-            font-weight: bold;
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-            text-align: center;
-            color: $text-color;
-        }
-    }
 }
 
 footer {
@@ -157,94 +179,6 @@ footer {
         margin: 0;
     }
 }
-
-
-@media (max-width: 1023px) {
-
-    body,
-    .table-of-contents,
-    main {
-        max-width: 100%;
-        padding: 1rem;
-    }
-
-    .table-of-contents {
-        position: static;
-        max-width: 100%;
-        margin-right: 0;
-    }
-
-    .sidenote {
-        display: none;
-    }
-
-    .footnote {
-        display: block;
-        margin-top: 2rem;
-        padding: 1rem;
-        font-size: 0.85rem;
-        color: $sidenote-color;
-        background-color: $sidenote-bg-color;
-        border-top: 1px solid $sidenote-border-color;
-
-        li {
-            margin-bottom: 1rem;
-
-            a {
-                color: $link-color;
-                text-decoration: underline;
-
-                &:hover {
-                    color: $link-hover-color;
-                    background-color: $link-hover-bg-color;
-                }
-            }
-        }
-    }
-}
-
-.page-details {
-    max-width: $content-max-width;
-    text-align: center;
-    margin-bottom: 2rem;
-
-    .page-title {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-    }
-
-    .page-description {
-        color: $accent-color;
-        margin-bottom: 1rem;
-    }
-
-    .page-meta {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        margin-top: 1rem;
-        font-size: 0.875rem;
-
-        span {
-            display: block;
-        }
-    }
-
-    .page-meta {
-        margin-top: 1rem;
-        font-size: $page-meta-font-size;
-
-        span {
-            display: block;
-            margin-bottom: 0.5rem;
-
-            &:last-child {
-                margin-bottom: 0;
-            }
-        }
-    }
-}
-
 
 .backlinks {
     margin-top: 2rem;
@@ -311,6 +245,185 @@ footer {
         .date,
         .time-worked {
             display: block;
+        }
+    }
+}
+
+.footnotes {
+    max-width: $content-max-width;
+    margin: 2rem auto;
+    padding: 1rem;
+    border-top: 1px solid $footnote-border-color;
+    background-color: $footnote-bg-color;
+    color: $footnote-text-color;
+    font-size: 0.875rem;
+    line-height: 1.5;
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: $text-color;
+        text-align: center;
+    }
+
+    ol {
+        list-style: decimal;
+        padding-left: 1.5rem;
+        margin-top: 1rem;
+
+        li {
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            border-left: 2px dotted $footnote-border-color;
+            background-color: $background-color;
+
+            &:nth-child(even) {
+                background-color: darken($footnote-bg-color, 5%);
+            }
+
+            a {
+                color: $footnote-link-color;
+                text-decoration: underline;
+                transition: color 0.2s, background-color 0.2s;
+
+                &:hover {
+                    color: $footnote-link-hover-color;
+                    background-color: $footnote-link-hover-bg-color;
+                }
+            }
+        }
+    }
+}
+
+.related-articles {
+    max-width: $content-max-width;
+    margin: 2rem auto;
+    padding: 1rem;
+    border-top: 1px solid $accent-color;
+    background-color: $background-color;
+    color: $text-color;
+    font-size: 0.875rem;
+    line-height: 1.5;
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: $text-color;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.05rem;
+        border-bottom: 1px dotted $accent-color;
+        display: inline-block;
+        padding-bottom: 0.5rem;
+    }
+
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        list-style: none;
+        padding: 0;
+        margin: 1rem auto;
+
+        li {
+            flex: 1 1 calc(33.333% - 1rem);
+            max-width: calc(33.333% - 1rem);
+            padding: 0.5rem 1rem;
+            border-left: 2px dotted $accent-color;
+            background-color: $background-color;
+            text-align: center;
+
+            a {
+                color: $link-color;
+                text-decoration: none;
+                font-weight: bold;
+                border-bottom: 1px dotted $text-color;
+                transition: color 0.2s, background-color 0.2s;
+
+                &:hover {
+                    color: $link-hover-color;
+                    background-color: $link-hover-bg-color;
+                }
+            }
+        }
+    }
+}
+
+.page-details {
+    max-width: $content-max-width;
+    margin: 0 auto 2rem auto;
+    text-align: center;
+
+    .page-title {
+        font-size: $page-title-font-size;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        color: $text-color;
+    }
+
+    .page-description {
+        font-size: 1rem;
+        color: $accent-color;
+        margin-bottom: 1rem;
+    }
+
+    .page-meta {
+        font-size: $page-meta-font-size;
+        text-align: center;
+        margin-top: 1rem;
+        color: $accent-color;
+
+        .meta-link {
+            color: $text-color;
+            margin: 0.5rem;
+            text-decoration: none;
+            line-height: 2;
+
+            &:hover {
+                color: $link-hover-color;
+            }
+        }
+    }
+}
+
+
+
+@media (max-width: 1023px) {
+
+    body,
+    .table-of-contents,
+    main {
+        max-width: 100%;
+        padding: 1rem;
+    }
+
+    .table-of-contents {
+        position: static;
+        max-width: 100%;
+        margin-right: 0;
+    }
+
+    .footnote {
+        display: block;
+        margin-top: 2rem;
+        padding: 1rem;
+        font-size: 0.85rem;
+        color: $footnote-text-color;
+        background-color: $footnote-bg-color;
+        border-top: 1px solid $footnote-border-color;
+
+        li {
+            margin-bottom: 1rem;
+
+            a {
+                color: $link-color;
+                text-decoration: underline;
+
+                &:hover {
+                    color: $link-hover-color;
+                    background-color: $link-hover-bg-color;
+                }
+            }
         }
     }
 }

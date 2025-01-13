@@ -1,7 +1,7 @@
 import os
 from src.base_utils import content_dir, public_dir, setup_logger, ensure_directory
 from src.file_manager import get_categories
-from src.markdown_parser import parse_frontmatter, parse_related
+from src.markdown_parser import parse_frontmatter, parse_related, parse_footnotes, parse_articles
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 
 logger = setup_logger("html_renderer", "logs/html_renderer.log")
@@ -22,19 +22,34 @@ def render_template_context(template_name: str, context: dict) -> str:
 
 def process_file(md_fp: str, output_fp: str, template_name: str, backlinks: dict) -> None:
     try:
+        logger.info(f"Processing file: {md_fp}")
+
         parsed_data = parse_frontmatter(md_fp)
         frontmatter = parsed_data.get("frontmatter", {})
-        articles = parsed_data.get("articles", [])
+        raw_content = parsed_data.get("content", "")
+
+        logger.info("Parsing footnotes.")
+        content_with_footnotes, footnotes = parse_footnotes(raw_content)
+
+        logger.info("Parsing articles.")
+        articles = parse_articles(content_with_footnotes, os.path.basename(md_fp), backlinks)
+
+        logger.info("Looking for related articles.")
         related = parse_related(frontmatter)
 
         context = {
-            "title": frontmatter.get("title", "Default Title"),
-            "description": frontmatter.get("description", "Default Description"),
+            "title": frontmatter.get("title", "Untitled"),
+            "description": frontmatter.get("description", ""),
             "page_meta": [
                 {"label": "Domain", "value": frontmatter.get("domain", "N/A")},
                 {"label": "Modified", "value": frontmatter.get("last_modified", "N/A")},
+                {"label": "Worked", "value": frontmatter.get("worked", "N/A")},
+                {"label": "Division", "value": ", ".join(frontmatter.get("division", []))},
             ],
-            "articles": articles,
+            "content": content_with_footnotes,
+            "articles": articles.get("articles", []),
+            "footnotes": footnotes,
+            "toc": articles["toc"],
             "backlinks": backlinks.get(os.path.splitext(os.path.basename(md_fp))[0], []),
             "related_articles": related,
         }
