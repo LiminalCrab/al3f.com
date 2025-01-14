@@ -109,7 +109,6 @@ def generate_missing() -> None:
                                 logger.info(f"Created missing file: {filepath}")
                             else:
                                 logger.info(f"File already exists: {filepath}")
-
     except Exception as err:
         logger.error(f"Error during generate_missing: {err}")
 

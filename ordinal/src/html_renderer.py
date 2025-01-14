@@ -1,6 +1,6 @@
 import os
 from src.base_utils import content_dir, public_dir, setup_logger, ensure_directory
-from src.file_manager import get_categories
+from src.file_manager import get_categories, generate_missing
 from src.markdown_parser import parse_frontmatter, parse_related, parse_footnotes, parse_articles
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 
@@ -29,10 +29,10 @@ def process_file(md_fp: str, output_fp: str, template_name: str, backlinks: dict
         raw_content = parsed_data.get("content", "")
 
         logger.info("Parsing footnotes.")
-        content_with_footnotes, footnotes = parse_footnotes(raw_content)
+        footnotes_content, footnotes = parse_footnotes(raw_content)
 
         logger.info("Parsing articles.")
-        articles = parse_articles(content_with_footnotes, os.path.basename(md_fp), backlinks)
+        articles = parse_articles(footnotes_content, os.path.basename(md_fp), backlinks)
 
         logger.info("Looking for related articles.")
         related = parse_related(frontmatter)
@@ -46,7 +46,7 @@ def process_file(md_fp: str, output_fp: str, template_name: str, backlinks: dict
                 {"label": "Worked", "value": frontmatter.get("worked", "N/A")},
                 {"label": "Division", "value": ", ".join(frontmatter.get("division", []))},
             ],
-            "content": content_with_footnotes,
+            "content": footnotes_content,
             "articles": articles.get("articles", []),
             "footnotes": footnotes,
             "toc": articles["toc"],
@@ -69,6 +69,11 @@ def generate_static_site(category="all"):
         logger.info("Starting site generation.")
         categories = get_categories()
         backlinks = {}
+
+        logger.info("Checking and generating missing markdown files.")
+        generate_missing()
+
+        process_index(content_dir, public_dir, backlinks)
 
         if category == "all":
             for cat in categories:
@@ -104,6 +109,7 @@ def process_category(category: str, content_dir: str, public_dir: str, backlinks
 
 def process_index(content_dir: str, public_dir: str, backlinks: dict) -> None:
     try:
+        logger.info("Processing `index.md`.")
         index_md_fp = os.path.join(content_dir, "index.md")
         index_template = "index.html"
         index_output_fp = os.path.join(public_dir, "index.html")
@@ -115,4 +121,4 @@ def process_index(content_dir: str, public_dir: str, backlinks: dict) -> None:
         process_file(index_md_fp, index_output_fp, index_template, backlinks)
         logger.info(f"Processed `index.md` into {index_output_fp}")
     except Exception as err:
-        logger.error(f"Error processing `index.md`: {err}")
+        logger.error(f"Error processing `index.md`: {err}", exc_info=True)

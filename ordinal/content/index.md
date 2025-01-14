@@ -1,8 +1,8 @@
 ---
-title: "The Infinite Archive"
+title: "Endless Conduit"
 description: "Formless and Empty"
-division: ["Design", "Research"]
-domain: "Ordinal"
+division: ["Writing"]
+domain: "Meta"
 worked: "6.5"
 last_modified: "2025-01-05"
 created: "2025-01-01"

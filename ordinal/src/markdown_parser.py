@@ -47,12 +47,15 @@ def parse_backlink(source: str, target: str, backlinks: Dict[str, List[str]]) ->
         target_key = target.replace(" ", "-").lower()
 
         if source_key == "index":
-            source_key = ""
-
-        if target_key not in backlinks:
-            backlinks[target_key] = []
-        if source_key not in backlinks[target_key]:
-            backlinks[target_key].append(source_key)
+            if target_key not in backlinks:
+                backlinks[target_key] = []
+            if source_key not in backlinks[target_key]:
+                backlinks[target_key].append(source_key)
+        else:
+            if target_key not in backlinks:
+                backlinks[target_key] = []
+            if source_key not in backlinks[target_key]:
+                backlinks[target_key].append(source_key)
 
         logger.info(f"Backlinks for '{target_key}': {backlinks[target_key]}")
     except Exception as err:

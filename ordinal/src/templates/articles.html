@@ -14,10 +14,10 @@
         <img src="../images/aleph-no-background-web256x256.png" alt="An image of an abstract Hebrew Alef">
         <nav>
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/articles/">Articles</a></li>
-                <li><a href="/notes/">Notes</a></li>
-                <li><a href="/about/">Contact</a></li>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="articles.html">Articles</a></li>
+                <li><a href="../notes/notes.html">Notes</a></li>
+                <li><a href="../about/index.html">Contact</a></li>
             </ul>
         </nav>
     </header>
@@ -82,16 +82,6 @@
     </section>
     {% endif %}
 
-    {% if backlinks %}
-    <section class="backlinks">
-        <h3>Backlinks</h3>
-        <ul>
-            {% for backlink in backlinks %}
-            <li><a href="/{{ backlink | replace(' ', '-') | lower }}.html">{{ backlink }}</a></li>
-            {% endfor %}
-        </ul>
-    </section>
-    {% endif %}
 
     {% if related_articles %}
     <section class="related-articles">
@@ -99,6 +89,12 @@
         <ul>
             {% for article in related_articles %}
             <li><a href="{{ article['url'] }}">{{ article['title'] }}</a></li>
+            {% endfor %}
+        </ul>
+        <h2>Referenced By</h2>
+        <ul>
+            {% for backlink in backlinks %}
+            <li><a href="/{{ backlink | replace(' ', '-') | lower }}.html">{{ backlink }}</a></li>
             {% endfor %}
         </ul>
     </section>
