@@ -17,7 +17,6 @@
                 <li><a href="../index.html">Home</a></li>
                 <li><a href="articles.html">Articles</a></li>
                 <li><a href="../notes/notes.html">Notes</a></li>
-                <li><a href="../about/index.html">Contact</a></li>
             </ul>
         </nav>
     </header>
@@ -95,6 +94,18 @@
         <ul>
             {% for backlink in backlinks %}
             <li><a href="/{{ backlink | replace(' ', '-') | lower }}.html">{{ backlink }}</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+
+
+    {% if external_links %}
+    <section class="external-links">
+        <h2>External References</h2>
+        <ul>
+            {% for link in external_links %}
+            <li><a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.text }}</a></li>
             {% endfor %}
         </ul>
     </section>

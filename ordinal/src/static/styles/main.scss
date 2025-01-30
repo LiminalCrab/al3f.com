@@ -1,28 +1,33 @@
 @use "sass:color";
 
+// Core Colors
 $background-color: #000000;
 $text-color: #ffffff;
+$accent-color: #aaaaaa;
 $link-color: #e0e0e0;
 $link-hover-color: #000000;
 $link-hover-bg-color: #ffffff;
 
+// Table of Contents
 $toc-bg-color: #111111;
-$toc-border-color: #ffffff;
+$toc-border-color: $text-color;
 $toc-link-color: $link-color;
 $toc-link-hover-color: $link-hover-color;
 $toc-width: 20%;
 $toc-spacing: 1rem;
-$toc-text-color: #ffffff;
+$toc-text-color: $text-color;
 
+// Content Layout
 $content-max-width: 110ch;
-$content-line-height: 1.8;
-$content-padding: 2rem;
+$content-line-height: 1.85;
+$content-padding: 2.5rem;
 
-$page-title-font-size: 2.5rem;
-$page-meta-font-size: 0.85rem;
+// Typography
+$page-title-font-size: 3rem;
+$page-meta-font-size: 1rem;
+$heading-border-color: $accent-color;
 
-$accent-color: #aaaaaa;
-
+// Footnotes
 $footnote-bg-color: $background-color;
 $footnote-border-color: $accent-color;
 $footnote-text-color: $text-color;
@@ -43,7 +48,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0;
     padding: $content-padding;
     text-align: center;
 }
@@ -82,15 +86,8 @@ header#site-banner {
         gap: 1rem;
 
         li a {
-            color: $link-color;
             font-weight: bold;
             padding: 0.5rem 1rem;
-            transition: color 0.2s, background-color 0.2s;
-
-            &:hover {
-                color: $link-hover-color;
-                background-color: $link-hover-bg-color;
-            }
         }
     }
 }
@@ -104,20 +101,16 @@ header#site-banner {
     border: 1px solid $toc-border-color;
     font-size: 0.875rem;
     color: $toc-text-color;
-    height: auto;
-    overflow: visible;
 
     h2 {
         font-size: 1.25rem;
         margin-bottom: $toc-spacing;
-        color: $text-color;
         text-transform: uppercase;
     }
 
     ul {
         list-style: decimal;
         padding: 0 1.5rem;
-        margin: 0;
 
         .toc-item {
             margin-bottom: 0.5rem;
@@ -131,51 +124,42 @@ header#site-banner {
             }
 
             a {
-                color: $toc-link-color;
-                text-decoration: none;
                 border-bottom: 1px dotted $text-color;
-
-                &:hover {
-                    color: $toc-link-hover-color;
-                }
             }
         }
     }
 }
 
-
-
 main {
     max-width: $content-max-width;
     margin: 0 auto;
-    padding: 1rem;
-    text-align: center;
+    padding: 2rem;
+    text-align: left;
+
+    h2 {
+        font-size: 2rem;
+        font-weight: bold;
+        text-align: left;
+        margin: 2rem 0 1rem;
+        padding-bottom: 0.25rem;
+        border-bottom: 1px solid $heading-border-color;
+        text-transform: uppercase;
+    }
+
+    h3 {
+        font-size: 1.6rem;
+        border-bottom: 1px dotted $heading-border-color;
+        padding-bottom: 0.8rem;
+    }
 
     p {
-        font-size: 1.325rem;
-        line-height: 1.8;
-        margin-bottom: 1.5rem;
-        text-align: left;
+        font-size: 1.6rem;
+        line-height: $content-line-height;
+        margin-bottom: 1.75rem;
+        text-indent: 2.5rem;
+        text-align: justify;
+        hyphens: auto;
     }
-
-    article {
-        margin-bottom: 2rem;
-
-        header h2 {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: $text-color;
-            text-align: left;
-            margin: 2rem 0 1rem 0;
-            padding-bottom: 0.25rem;
-            border-bottom: 1px solid $accent-color;
-            text-transform: uppercase;
-        }
-    }
-}
-
-section p {
-    margin-bottom: 2rem;
 }
 
 footer {
@@ -183,10 +167,6 @@ footer {
     margin-top: 2rem;
     font-size: 0.875rem;
     color: $accent-color;
-
-    p {
-        margin: 0;
-    }
 }
 
 .backlinks {
@@ -198,204 +178,133 @@ footer {
     h3 {
         font-size: 1.5rem;
         margin-bottom: 1rem;
-        color: $text-color;
     }
 
     ul {
         list-style: none;
         padding: 0;
-        margin: 0 auto;
         display: inline-block;
 
         li {
             margin-bottom: 0.5rem;
 
             a {
-                color: $link-color;
-                text-decoration: none;
                 border-bottom: 1px dotted $text-color;
-                transition: color 0.2s, background-color 0.2s;
-
-                &:hover {
-                    color: $link-hover-color;
-                    background-color: $link-hover-bg-color;
-                }
             }
-        }
-    }
-}
-
-.article-list {
-    list-style: none;
-    padding: 0;
-    margin: 1rem 0;
-
-    li {
-        margin-bottom: 1rem;
-    }
-
-    .article-link {
-        font-size: 1.25rem;
-        color: $link-color;
-        text-decoration: none;
-        font-weight: bold;
-
-        &:hover {
-            color: $link-hover-color;
-            background-color: $link-hover-bg-color;
-        }
-    }
-
-    .article-meta {
-        font-size: 0.875rem;
-        color: $accent-color;
-        margin-top: 0.5rem;
-
-        .date,
-        .time-worked {
-            display: block;
         }
     }
 }
 
 .footnotes {
     max-width: $content-max-width;
-    margin: 2rem auto;
-    padding: 1rem;
-    border-top: 1px solid $footnote-border-color;
-    background-color: $footnote-bg-color;
-    color: $footnote-text-color;
-    font-size: 1.25rem;
-    line-height: 1.75;
+    margin: 3rem auto;
+    padding: 1.5rem;
 
     h2 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-        color: $text-color;
-        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
     }
 
     ol {
         list-style: decimal;
-        padding-left: 2rem;
-        margin-top: 1rem;
+        padding-left: 2.5rem;
+        font-size: 1.6rem;
+        line-height: $content-line-height;
+        text-align: justify;
+        hyphens: auto;
 
         li {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.75rem;
             padding: 0.5rem 1rem;
-            border-left: 3px dotted $footnote-border-color;
-            background-color: $background-color;
+            text-indent: 2.5rem;
+            border-left: 2px solid $accent-color;
 
-            &:nth-child(even) {
-                background-color: color.scale($footnote-bg-color, $lightness: -5%);
+            &:hover {
+                border-left: 2px solid $link-hover-color;
+                background: color.scale($background-color, $lightness: 10%);
             }
 
             a {
-                color: $footnote-link-color;
                 text-decoration: underline;
                 font-weight: bold;
-                transition: color 0.2s, background-color 0.2s;
-
-                &:hover {
-                    color: $footnote-link-hover-color;
-                    background-color: $footnote-link-hover-bg-color;
-                }
             }
         }
     }
 }
 
-.related-articles {
+.articles-list {
     max-width: $content-max-width;
     margin: 2rem auto;
     padding: 1rem;
-    background-color: $background-color;
-    color: $text-color;
-    font-size: 0.875rem;
-    line-height: 1.5;
+    text-align: left;
 
     h2 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
+        font-size: 1.75rem;
+        font-weight: normal;
+        margin-bottom: 1.5rem;
         color: $text-color;
-        text-align: center;
-        text-transform: uppercase;
-        letter-spacing: 0.05rem;
-        border-bottom: 1px dotted $accent-color;
-        display: inline-block;
-        padding-bottom: 0.5rem;
     }
 
-    ul {
+    .article-columns {
         display: flex;
         flex-wrap: wrap;
-        gap: 1rem;
-        list-style: none;
-        padding: 0;
-        margin: 1rem auto;
+        gap: 1.5rem;
+    }
 
-        li {
-            flex: 1 1 calc(33.333% - 1rem);
-            max-width: calc(33.333% - 1rem);
-            padding: 0.5rem 1rem;
-            border-left: 2px dotted $accent-color;
-            background-color: $background-color;
-            text-align: center;
+    .article-entry {
+        flex: 1 1 calc(50% - 1.5rem);
+        padding: 1.5rem;
+        border-left: 2px solid $accent-color;
+        background: color.scale($background-color, $lightness: 5%);
+        transition: border 0.2s ease-in-out, background 0.2s ease-in-out;
 
-            a {
-                color: $link-color;
-                text-decoration: none;
-                font-weight: bold;
-                border-bottom: 1px dotted $text-color;
-                transition: color 0.2s, background-color 0.2s;
-
-                &:hover {
-                    color: $link-hover-color;
-                    background-color: $link-hover-bg-color;
-                }
-            }
+        &:hover {
+            border-left: 2px solid $link-hover-color;
+            background: color.scale($background-color, $lightness: 10%);
         }
-    }
-}
 
-.page-details {
-    max-width: $content-max-width;
-    margin: 0 auto 2rem auto;
-    text-align: center;
-
-    .page-title {
-        font-size: $page-title-font-size;
-        margin-bottom: 1rem;
-        text-transform: uppercase;
-        color: $text-color;
-    }
-
-    .page-description {
-        font-size: 1rem;
-        color: $accent-color;
-        margin-bottom: 1rem;
-    }
-
-    .page-meta {
-        font-size: $page-meta-font-size;
-        text-align: center;
-        margin-top: 1rem;
-        color: $accent-color;
-
-        .meta-link {
-            color: $text-color;
-            margin: 0.5rem;
+        .article-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: $link-color;
             text-decoration: none;
-            line-height: 2;
+            display: block;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px dotted $text-color;
+            transition: color 0.2s, background-color 0.2s;
 
             &:hover {
                 color: $link-hover-color;
+                background-color: $link-hover-bg-color;
+            }
+        }
+
+        .article-meta {
+            font-size: 1rem;
+            color: $accent-color;
+            margin-top: 0.5rem;
+            padding-left: 1rem;
+
+            p {
+                margin: 0.25rem 0;
+                font-size: 1rem;
+                line-height: 1.5;
+                text-indent: 0;
             }
         }
     }
 }
 
+@media (max-width: 768px) {
+    .article-columns {
+        flex-direction: column;
+    }
 
+    .article-entry {
+        flex: 1 1 100%;
+        padding: 1rem;
+    }
+}
 
 @media (max-width: 1023px) {
 
@@ -411,22 +320,161 @@ footer {
         max-width: 100%;
         margin-right: 0;
     }
+}
 
-    .footnote {
+figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1.5rem 0;
+    text-align: center;
+
+    img {
+        max-width: 100%;
+        height: auto;
         display: block;
-        margin-top: 2rem;
-        padding: 1rem;
-        font-size: 0.85rem;
-        color: $footnote-text-color;
-        background-color: $footnote-bg-color;
-        border-top: 1px solid $footnote-border-color;
+        margin: 0;
+        padding: 0;
+    }
+
+    figcaption {
+        font-size: 0.9rem;
+        color: $accent-color;
+        margin-top: 0.3rem;
+        line-height: 1.2;
+    }
+}
+
+.related-articles {
+    max-width: $content-max-width;
+    margin: 0.5rem auto;
+    padding: 0.5rem;
+    background-color: $background-color;
+    color: $text-color;
+    font-size: 1rem;
+    line-height: 1.6;
+    border-top: 1px solid $accent-color;
+    text-align: center;
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: $text-color;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.05rem;
+        border-bottom: 1px solid $accent-color;
+        display: inline-block;
+        padding-bottom: 0.5rem;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0.5rem auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
 
         li {
-            margin-bottom: 1rem;
+            flex: 1 1 calc(33.333% - 0.5rem);
+            max-width: calc(33.333% - 0.5rem);
+            padding: 0.2rem 0.5rem;
+            border-left: 2px solid $accent-color;
+            background-color: $background-color;
+            text-align: center;
+            transition: border 0.2s ease-in-out, background 0.2s ease-in-out;
+
+            &:hover {
+                border-left: 2px solid $link-hover-color;
+                background: color.scale($background-color, $lightness: 5%);
+            }
 
             a {
                 color: $link-color;
-                text-decoration: underline;
+                text-decoration: none;
+                font-weight: bold;
+                border-bottom: 1px dotted $text-color;
+                transition: color 0.2s, background-color 0.2s;
+
+                &:hover {
+                    color: $link-hover-color;
+                    background-color: $link-hover-bg-color;
+                }
+            }
+        }
+    }
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 1.6rem;
+    line-height: 1.5;
+    background-color: $background-color;
+    color: $text-color;
+    border: 1px solid $accent-color;
+
+    thead {
+        background-color: color.scale($background-color, $lightness: 10%);
+        text-transform: uppercase;
+    }
+
+    th,
+    td {
+        padding: 0.8rem;
+        text-align: left;
+        border-bottom: 1px solid $accent-color;
+    }
+
+    tr:hover {
+        background-color: color.scale($background-color, $lightness: 5%);
+    }
+}
+
+
+.external-links {
+    max-width: 110ch;
+    margin: 3rem auto;
+    padding: 1.5rem;
+    border-top: 1px solid $accent-color;
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: $text-color;
+        text-align: left;
+        text-transform: uppercase;
+    }
+
+    ol {
+        list-style: decimal;
+        padding-left: 2.5rem;
+        font-size: 1.6rem;
+        line-height: 1.85;
+        text-align: justify;
+        hyphens: auto;
+
+        li {
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+            border-left: 2px solid $accent-color;
+            transition: border 0.2s ease-in-out, background 0.2s ease-in-out;
+
+            &:hover {
+                border-left: 2px solid $link-hover-color;
+                background: color.scale($background-color, $lightness: 10%);
+            }
+
+            a {
+                color: $link-color;
+                text-decoration: none;
+                border-bottom: 1px dotted $text-color;
+                font-weight: bold;
+                transition: color 0.2s, background-color 0.2s;
 
                 &:hover {
                     color: $link-hover-color;

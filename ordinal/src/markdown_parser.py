@@ -41,6 +41,63 @@ def markdown_output(md_fp: str, backlinks: Dict[str, List[str]]) -> None:
         logger.error(f"Error logging Markdown output for: {md_fp}: {err}")
 
 
+def parse_tables(md_content: str) -> str:
+    table_pattern = re.compile(
+        r"^(\|(?:.*\|)+)\n(\|(?: *[-:]+[-| :]*)\|)\n((?:\|(?:.*\|)+\n?)*)",
+        re.MULTILINE,
+    )
+
+    def replace_table(match):
+        headers = match.group(1).strip().split("|")[1:-1]
+        rows = match.group(3).strip().split("\n")
+        header_html = "".join(f"<th>{h.strip()}</th>" for h in headers)
+
+        row_html = ""
+        for row in rows:
+            cells = row.strip().split("|")[1:-1]
+            row_html += "<tr>" + "".join(f"<td>{c.strip()}</td>" for c in cells) + "</tr>"
+
+        return f"""
+        <table>
+            <thead><tr>{header_html}</tr></thead>
+            <tbody>{row_html}</tbody>
+        </table>
+        """
+
+    return table_pattern.sub(replace_table, md_content)
+
+
+def parse_italics(md_content: str) -> str:
+    italic_pattern = r"(?<!\w)_(.+?)_(?!\w)"
+    return re.sub(italic_pattern, r"<em>\1</em>", md_content)
+
+
+def parse_bold_text(md_content: str) -> str:
+    bold_pattern = r"\*\*(.*?)\*\*"
+
+    def replace_bold(match):
+        bold_text = match.group(1)
+        return f"<strong>{bold_text}</strong>"
+
+    return re.sub(bold_pattern, replace_bold, md_content)
+
+
+def parse_images(md_content: str, base_path: str = "./images/") -> str:
+    image_pattern = r"!\[(.*?)\]\((.*?)\)"
+
+    def replace_image(match):
+        alt_text, src = match.groups()
+        image_path = os.path.join(base_path, os.path.basename(src))
+        return f"""
+        <figure>
+            <img src="{image_path}" alt="{alt_text}">
+            <figcaption>{alt_text}</figcaption>
+        </figure>
+        """
+
+    return re.sub(image_pattern, replace_image, md_content)
+
+
 def parse_backlink(source: str, target: str, backlinks: Dict[str, List[str]]) -> None:
     try:
         source_key = os.path.splitext(os.path.basename(source))[0].replace(" ", "-").lower()
@@ -102,6 +159,10 @@ def parse_articles(md_content: str, page_name: str, backlinks: Dict[str, List[st
 
     try:
         processed_content, footnotes = parse_footnotes(md_content)
+        processed_content = parse_images(processed_content)
+        processed_content = parse_bold_text(processed_content)
+        processed_content = parse_italics(processed_content)
+        processed_content = parse_tables(processed_content)
 
         for line in processed_content.split("\n"):
             if line.startswith("## "):

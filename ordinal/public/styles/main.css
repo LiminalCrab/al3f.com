@@ -11,8 +11,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0;
-  padding: 2rem;
+  padding: 2.5rem;
   text-align: center;
 }
 
@@ -47,14 +46,8 @@ header#site-banner nav ul {
   gap: 1rem;
 }
 header#site-banner nav ul li a {
-  color: #e0e0e0;
   font-weight: bold;
   padding: 0.5rem 1rem;
-  transition: color 0.2s, background-color 0.2s;
-}
-header#site-banner nav ul li a:hover {
-  color: #000000;
-  background-color: #ffffff;
 }
 
 .toc {
@@ -66,19 +59,15 @@ header#site-banner nav ul li a:hover {
   border: 1px solid #ffffff;
   font-size: 0.875rem;
   color: #ffffff;
-  height: auto;
-  overflow: visible;
 }
 .toc h2 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
-  color: #ffffff;
   text-transform: uppercase;
 }
 .toc ul {
   list-style: decimal;
   padding: 0 1.5rem;
-  margin: 0;
 }
 .toc ul .toc-item {
   margin-bottom: 0.5rem;
@@ -90,42 +79,36 @@ header#site-banner nav ul li a:hover {
   padding-left: 1rem;
 }
 .toc ul .toc-item a {
-  color: #e0e0e0;
-  text-decoration: none;
   border-bottom: 1px dotted #ffffff;
-}
-.toc ul .toc-item a:hover {
-  color: #000000;
 }
 
 main {
   max-width: 110ch;
   margin: 0 auto;
-  padding: 1rem;
-  text-align: center;
-}
-main p {
-  font-size: 1.325rem;
-  line-height: 1.8;
-  margin-bottom: 1.5rem;
+  padding: 2rem;
   text-align: left;
 }
-main article {
-  margin-bottom: 2rem;
-}
-main article header h2 {
-  font-size: 1.5rem;
+main h2 {
+  font-size: 2rem;
   font-weight: bold;
-  color: #ffffff;
   text-align: left;
-  margin: 2rem 0 1rem 0;
+  margin: 2rem 0 1rem;
   padding-bottom: 0.25rem;
   border-bottom: 1px solid #aaaaaa;
   text-transform: uppercase;
 }
-
-section p {
-  margin-bottom: 2rem;
+main h3 {
+  font-size: 1.6rem;
+  border-bottom: 1px dotted #aaaaaa;
+  padding-bottom: 0.8rem;
+}
+main p {
+  font-size: 1.6rem;
+  line-height: 1.85;
+  margin-bottom: 1.75rem;
+  text-indent: 2.5rem;
+  text-align: justify;
+  hyphens: auto;
 }
 
 footer {
@@ -133,9 +116,6 @@ footer {
   margin-top: 2rem;
   font-size: 0.875rem;
   color: #aaaaaa;
-}
-footer p {
-  margin: 0;
 }
 
 .backlinks {
@@ -147,105 +127,159 @@ footer p {
 .backlinks h3 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
-  color: #ffffff;
 }
 .backlinks ul {
   list-style: none;
   padding: 0;
-  margin: 0 auto;
   display: inline-block;
 }
 .backlinks ul li {
   margin-bottom: 0.5rem;
 }
 .backlinks ul li a {
-  color: #e0e0e0;
-  text-decoration: none;
   border-bottom: 1px dotted #ffffff;
-  transition: color 0.2s, background-color 0.2s;
-}
-.backlinks ul li a:hover {
-  color: #000000;
-  background-color: #ffffff;
-}
-
-.article-list {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0;
-}
-.article-list li {
-  margin-bottom: 1rem;
-}
-.article-list .article-link {
-  font-size: 1.25rem;
-  color: #e0e0e0;
-  text-decoration: none;
-  font-weight: bold;
-}
-.article-list .article-link:hover {
-  color: #000000;
-  background-color: #ffffff;
-}
-.article-list .article-meta {
-  font-size: 0.875rem;
-  color: #aaaaaa;
-  margin-top: 0.5rem;
-}
-.article-list .article-meta .date,
-.article-list .article-meta .time-worked {
-  display: block;
 }
 
 .footnotes {
   max-width: 110ch;
-  margin: 2rem auto;
-  padding: 1rem;
-  border-top: 1px solid #aaaaaa;
-  background-color: #000000;
-  color: #ffffff;
-  font-size: 1.25rem;
-  line-height: 1.75;
+  margin: 3rem auto;
+  padding: 1.5rem;
 }
 .footnotes h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: #ffffff;
-  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
 }
 .footnotes ol {
   list-style: decimal;
-  padding-left: 2rem;
-  margin-top: 1rem;
+  padding-left: 2.5rem;
+  font-size: 1.6rem;
+  line-height: 1.85;
+  text-align: justify;
+  hyphens: auto;
 }
 .footnotes ol li {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
   padding: 0.5rem 1rem;
-  border-left: 3px dotted #aaaaaa;
-  background-color: #000000;
+  text-indent: 2.5rem;
+  border-left: 2px solid #aaaaaa;
 }
-.footnotes ol li:nth-child(even) {
-  background-color: black;
+.footnotes ol li:hover {
+  border-left: 2px solid #000000;
+  background: rgb(25.5, 25.5, 25.5);
 }
 .footnotes ol li a {
-  color: #e0e0e0;
   text-decoration: underline;
   font-weight: bold;
+}
+
+.articles-list {
+  max-width: 110ch;
+  margin: 2rem auto;
+  padding: 1rem;
+  text-align: left;
+}
+.articles-list h2 {
+  font-size: 1.75rem;
+  font-weight: normal;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+}
+.articles-list .article-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.articles-list .article-entry {
+  flex: 1 1 calc(50% - 1.5rem);
+  padding: 1.5rem;
+  border-left: 2px solid #aaaaaa;
+  background: rgb(12.75, 12.75, 12.75);
+  transition: border 0.2s ease-in-out, background 0.2s ease-in-out;
+}
+.articles-list .article-entry:hover {
+  border-left: 2px solid #000000;
+  background: rgb(25.5, 25.5, 25.5);
+}
+.articles-list .article-entry .article-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #e0e0e0;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px dotted #ffffff;
   transition: color 0.2s, background-color 0.2s;
 }
-.footnotes ol li a:hover {
+.articles-list .article-entry .article-title:hover {
   color: #000000;
   background-color: #ffffff;
+}
+.articles-list .article-entry .article-meta {
+  font-size: 1rem;
+  color: #aaaaaa;
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+}
+.articles-list .article-entry .article-meta p {
+  margin: 0.25rem 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-indent: 0;
+}
+
+@media (max-width: 768px) {
+  .article-columns {
+    flex-direction: column;
+  }
+  .article-entry {
+    flex: 1 1 100%;
+    padding: 1rem;
+  }
+}
+@media (max-width: 1023px) {
+  body,
+  .table-of-contents,
+  main {
+    max-width: 100%;
+    padding: 1rem;
+  }
+  .table-of-contents {
+    position: static;
+    max-width: 100%;
+    margin-right: 0;
+  }
+}
+figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+figure img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+figure figcaption {
+  font-size: 0.9rem;
+  color: #aaaaaa;
+  margin-top: 0.3rem;
+  line-height: 1.2;
 }
 
 .related-articles {
   max-width: 110ch;
-  margin: 2rem auto;
-  padding: 1rem;
+  margin: 0.5rem auto;
+  padding: 0.5rem;
   background-color: #000000;
   color: #ffffff;
-  font-size: 0.875rem;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.6;
+  border-top: 1px solid #aaaaaa;
+  text-align: center;
 }
 .related-articles h2 {
   font-size: 1.5rem;
@@ -254,25 +288,31 @@ footer p {
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.05rem;
-  border-bottom: 1px dotted #aaaaaa;
+  border-bottom: 1px solid #aaaaaa;
   display: inline-block;
   padding-bottom: 0.5rem;
 }
 .related-articles ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
   list-style: none;
   padding: 0;
-  margin: 1rem auto;
+  margin: 0.5rem auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
 }
 .related-articles ul li {
-  flex: 1 1 calc(33.333% - 1rem);
-  max-width: calc(33.333% - 1rem);
-  padding: 0.5rem 1rem;
-  border-left: 2px dotted #aaaaaa;
+  flex: 1 1 calc(33.333% - 0.5rem);
+  max-width: calc(33.333% - 0.5rem);
+  padding: 0.2rem 0.5rem;
+  border-left: 2px solid #aaaaaa;
   background-color: #000000;
   text-align: center;
+  transition: border 0.2s ease-in-out, background 0.2s ease-in-out;
+}
+.related-articles ul li:hover {
+  border-left: 2px solid #000000;
+  background: rgb(12.75, 12.75, 12.75);
 }
 .related-articles ul li a {
   color: #e0e0e0;
@@ -286,70 +326,71 @@ footer p {
   background-color: #ffffff;
 }
 
-.page-details {
-  max-width: 110ch;
-  margin: 0 auto 2rem auto;
-  text-align: center;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 1.6rem;
+  line-height: 1.5;
+  background-color: #000000;
+  color: #ffffff;
+  border: 1px solid #aaaaaa;
 }
-.page-details .page-title {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+table thead {
+  background-color: rgb(25.5, 25.5, 25.5);
   text-transform: uppercase;
-  color: #ffffff;
 }
-.page-details .page-description {
-  font-size: 1rem;
-  color: #aaaaaa;
-  margin-bottom: 1rem;
+table th,
+table td {
+  padding: 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid #aaaaaa;
 }
-.page-details .page-meta {
-  font-size: 0.85rem;
-  text-align: center;
-  margin-top: 1rem;
-  color: #aaaaaa;
-}
-.page-details .page-meta .meta-link {
-  color: #ffffff;
-  margin: 0.5rem;
-  text-decoration: none;
-  line-height: 2;
-}
-.page-details .page-meta .meta-link:hover {
-  color: #000000;
+table tr:hover {
+  background-color: rgb(12.75, 12.75, 12.75);
 }
 
-@media (max-width: 1023px) {
-  body,
-  .table-of-contents,
-  main {
-    max-width: 100%;
-    padding: 1rem;
-  }
-  .table-of-contents {
-    position: static;
-    max-width: 100%;
-    margin-right: 0;
-  }
-  .footnote {
-    display: block;
-    margin-top: 2rem;
-    padding: 1rem;
-    font-size: 0.85rem;
-    color: #ffffff;
-    background-color: #000000;
-    border-top: 1px solid #aaaaaa;
-  }
-  .footnote li {
-    margin-bottom: 1rem;
-  }
-  .footnote li a {
-    color: #e0e0e0;
-    text-decoration: underline;
-  }
-  .footnote li a:hover {
-    color: #000000;
-    background-color: #ffffff;
-  }
+.external-links {
+  max-width: 110ch;
+  margin: 3rem auto;
+  padding: 1.5rem;
+  border-top: 1px solid #aaaaaa;
+}
+.external-links h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  text-align: left;
+  text-transform: uppercase;
+}
+.external-links ol {
+  list-style: decimal;
+  padding-left: 2.5rem;
+  font-size: 1.6rem;
+  line-height: 1.85;
+  text-align: justify;
+  hyphens: auto;
+}
+.external-links ol li {
+  margin-bottom: 1.5rem;
+  padding-left: 1rem;
+  border-left: 2px solid #aaaaaa;
+  transition: border 0.2s ease-in-out, background 0.2s ease-in-out;
+}
+.external-links ol li:hover {
+  border-left: 2px solid #000000;
+  background: rgb(25.5, 25.5, 25.5);
+}
+.external-links ol li a {
+  color: #e0e0e0;
+  text-decoration: none;
+  border-bottom: 1px dotted #ffffff;
+  font-weight: bold;
+  transition: color 0.2s, background-color 0.2s;
+}
+.external-links ol li a:hover {
+  color: #000000;
+  background-color: #ffffff;
 }
 
 /*# sourceMappingURL=main.css.map */
