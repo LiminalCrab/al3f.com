@@ -14,9 +14,8 @@
         <img src="./images/aleph-no-background-web256x256.png" alt="An image of an abstract Hebrew Alef">
         <nav>
             <ul>
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="articles.html">Articles</a></li>
-                <li><a href="../notes/notes.html">Notes</a></li>
+                <li><a href="{{ base_url }}index.html">Home</a></li>
+                <li><a href="{{ base_url }}articles/articles.html">Articles</a></li>
             </ul>
         </nav>
     </header>
@@ -44,7 +43,8 @@
 
     <main>
         <aside class="toc">
-            <h2>Contents</h2>
+            {% if toc %}
+
             <ul>
                 {% for item in toc %}
                 <li class="toc-item toc-level-{{ item.level }}">
@@ -52,7 +52,10 @@
                 </li>
                 {% endfor %}
             </ul>
+            {% endif %}
+
         </aside>
+
         {% for article in articles %}
         <article>
             <header>

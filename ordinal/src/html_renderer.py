@@ -1,14 +1,44 @@
 import os
-import json
+import shutil
 from src.base_utils import content_dir, public_dir, setup_logger, ensure_directory
-from src.file_manager import get_categories, generate_missing
+from src.file_manager import get_categories, generate_missing, merge_image_dir
 from src.markdown_parser import parse_frontmatter, parse_related, parse_footnotes, parse_articles
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
+import subprocess
 
 
 logger = setup_logger("html_renderer", "logs/html_renderer.log")
 
 env = Environment(loader=FileSystemLoader("src/templates"))
+
+
+def compile_scss():
+    try:
+        scss_path = "src/static/styles/main.scss"
+        css_output = os.path.join(public_dir, "styles", "main.css")
+        ensure_directory(os.path.dirname(css_output))
+        subprocess.run(["sass", scss_path, css_output], check=True)
+        logger.info(f"Compiled SCSS: {scss_path} -> {css_output}")
+    except Exception as err:
+        logger.error(f"Error compiling SCSS: {err}")
+
+
+def copy_static_files():
+    try:
+        static_src = os.path.join("src", "static")
+        static_dest = os.path.join(public_dir)
+        ensure_directory(static_dest)
+
+        for root, _, files in os.walk(static_src):
+            for file in files:
+                src_fp = os.path.join(root, file)
+                rel_fp = os.path.relpath(src_fp, static_src)
+                dest_fp = os.path.join(static_dest, rel_fp)
+                ensure_directory(os.path.dirname(dest_fp))
+                shutil.copy2(src_fp, dest_fp)
+                logger.info(f"Copied static file: {src_fp} -> {dest_fp}")
+    except Exception as err:
+        logger.error(f"Error copying static files: {err}")
 
 
 def render_template_context(template_name: str, context: dict) -> str:
@@ -49,6 +79,10 @@ def process_file(md_fp: str, output_fp: str, default_template: str, backlinks: d
     try:
         logger.info(f"Processing file: {md_fp}")
 
+        if os.path.exists(output_fp):
+            os.remove(output_fp)
+            logger.info(f"Deleted old file: {output_fp}")
+
         parsed_data = parse_frontmatter(md_fp)
         frontmatter = parsed_data.get("frontmatter", {})
         raw_content = parsed_data.get("content", "")
@@ -63,6 +97,7 @@ def process_file(md_fp: str, output_fp: str, default_template: str, backlinks: d
         related = parse_related(frontmatter)
 
         template_name = frontmatter.get("template", default_template)
+        logger.info(f"Using template: {template_name} for {md_fp}")
 
         context = {
             "title": frontmatter.get("title", "Untitled"),
@@ -70,9 +105,17 @@ def process_file(md_fp: str, output_fp: str, default_template: str, backlinks: d
             "page_meta": [
                 {"label": "Domain", "value": frontmatter.get("domain", "N/A")},
                 {"label": "Modified", "value": frontmatter.get("last_modified", "N/A")},
-                {"label": "Worked", "value": frontmatter.get("worked", "N/A")},
+                {
+                    "label": "Worked",
+                    "value": (
+                        f"{float(frontmatter['worked'])}h"
+                        if "worked" in frontmatter and str(frontmatter["worked"]).replace(".", "", 1).isdigit()
+                        else "N/A"
+                    ),
+                },
                 {"label": "Division", "value": ", ".join(frontmatter.get("division", []))},
             ],
+            "base_url": "/ordinal/public/",
             "content": footnotes_content,
             "articles": articles.get("articles", []),
             "footnotes": footnotes,
@@ -87,7 +130,7 @@ def process_file(md_fp: str, output_fp: str, default_template: str, backlinks: d
 
         rendered_html = render_template_context(template_name, context)
         ensure_directory(os.path.dirname(output_fp))
-        logger.info(f"Rendering template with context:\n{json.dumps(context, indent=4)}")
+        # logger.info(f"Rendering template with context:\n{json.dumps(context, indent=4)}")
         with open(output_fp, "w", encoding="utf-8") as f:
             f.write(rendered_html)
 
@@ -115,6 +158,11 @@ def generate_static_site(category="all"):
                 process_category(category, content_dir, public_dir, backlinks)
             else:
                 logger.error(f"Invalid category: {category}")
+        logger.info("Copying all necessary static files.")
+        copy_static_files()
+        merge_image_dir()
+        compile_scss()
+
     except Exception as err:
         logger.error(f"Error generating static site: {err}", exc_info=True)
 

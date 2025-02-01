@@ -55,10 +55,13 @@ header#site-banner nav ul li a {
   width: 20%;
   margin-right: 1rem;
   padding: 1rem;
-  background-color: #111111;
-  border: 1px solid #ffffff;
+  background-color: #111;
+  border: 1px solid #fff;
   font-size: 0.875rem;
-  color: #ffffff;
+  color: #fff;
+  max-height: 80vh;
+  overflow-y: auto;
+  min-height: 2rem;
 }
 .toc h2 {
   font-size: 1.25rem;
@@ -79,9 +82,27 @@ header#site-banner nav ul li a {
   padding-left: 1rem;
 }
 .toc ul .toc-item a {
-  border-bottom: 1px dotted #ffffff;
+  border-bottom: 1px dotted #fff;
+}
+.toc .toc-empty {
+  text-align: center;
+  font-style: italic;
+  color: #888;
 }
 
+@media (max-width: 768px) {
+  .toc {
+    width: 100%;
+    margin: 0;
+    padding: 1rem;
+    border: none;
+    text-align: center;
+    max-height: unset;
+  }
+  .toc ul {
+    padding: 0;
+  }
+}
 main {
   max-width: 110ch;
   margin: 0 auto;
@@ -326,6 +347,65 @@ figure figcaption {
   background-color: #ffffff;
 }
 
+.page-details {
+  text-align: center;
+  margin-bottom: 3rem;
+  /* Adds more spacing between this section and content */
+  padding: 2.5rem 0;
+  /* Adds vertical padding */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.page-details .page-title {
+  font-size: 4rem;
+  /* Makes the title significantly larger */
+  font-weight: bold;
+  margin-bottom: 1rem;
+  /* Adds space below the title */
+  text-transform: uppercase;
+}
+.page-details .page-description {
+  font-size: 1.6rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 2rem;
+}
+.page-details .page-meta {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  /* Adds spacing between meta sections */
+  font-size: 1.2rem;
+}
+.page-details .page-meta .meta-section {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}
+.page-details .page-meta .meta-section .meta-link {
+  text-decoration: none;
+  font-weight: bold;
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.5);
+  transition: color 0.2s, border-color 0.2s;
+}
+.page-details .page-meta .meta-section .meta-link:hover {
+  color: #fff;
+  border-color: #fff;
+}
+
+@media (max-width: 768px) {
+  .page-details {
+    padding: 1.5rem 0;
+  }
+  .page-title {
+    font-size: 3rem;
+  }
+  .page-description {
+    font-size: 1.4rem;
+  }
+  .page-meta {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
 table {
   width: 100%;
   border-collapse: collapse;

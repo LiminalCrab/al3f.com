@@ -11,6 +11,8 @@ from src.base_utils import (
     snapshots_dir,
 )
 
+from src.markdown_parser import parse_frontmatter
+
 logger = setup_logger("file_manager", "logs/file_manager.log")
 logs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "logs")
 
@@ -65,8 +67,81 @@ def setup_project() -> None:
         logger.error(f"Unexpected error in setup_project: {err}")
 
 
+def generate_section() -> None:
+    try:
+        logger.info("Regenerating section markdown files.")
+
+        categories = get_categories()
+
+        for category in categories:
+            section_md_fp = os.path.join(content_dir, category, f"{category}.md")
+
+            articles = []
+            for root, _, files in os.walk(os.path.join(content_dir, category)):
+                for file in files:
+                    if file.endswith(".md") and file != f"{category}.md":
+                        md_fp = os.path.join(root, file)
+                        with open(md_fp, "r", encoding="utf-8") as f:
+                            frontmatter_data = parse_frontmatter(md_fp)
+                            frontmatter = frontmatter_data.get("frontmatter", {})
+                            title = frontmatter.get("title", file.replace(".md", ""))
+                            created = frontmatter.get("created", "Unknown")
+                            domain = frontmatter.get("domain", "Uncategorized")
+
+                            wikilink = f"[[{title}]]"
+
+                            articles.append(
+                                {
+                                    "title": title,
+                                    "wikilink": wikilink,
+                                    "created": created,
+                                    "domain": domain,
+                                    "url": f"/{category}/{file.replace('.md', '.html')}",
+                                }
+                            )
+
+            articles.sort(key=lambda x: x["created"], reverse=True)
+
+            articles_by_domain = {}
+            for article in articles:
+                domain = article["domain"]
+                if domain not in articles_by_domain:
+                    articles_by_domain[domain] = []
+                articles_by_domain[domain].append(article)
+
+            new_content = f"""---
+title: {category.title()}
+description: "This section contains all {category}."
+created: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+last_modified: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+---
+
+# {category.title()}
+
+## Latest Articles
+"""
+
+            for article in articles[:5]:
+                new_content += f"- {article['wikilink']} - {article['created']}\n"
+
+            new_content += "\n## All Articles by Domain\n"
+            for domain, domain_articles in articles_by_domain.items():
+                new_content += f"\n### {domain.title()}\n"
+                for article in domain_articles:
+                    new_content += f"- {article['wikilink']}\n"
+
+            with open(section_md_fp, "w", encoding="utf-8") as f:
+                f.write(new_content)
+
+            logger.info(f"Updated section markdown: {section_md_fp}")
+
+    except Exception as err:
+        logger.error(f"Error regenerating section markdown files: {err}", exc_info=True)
+
+
 def generate_missing() -> None:
     template_fp = os.path.join(content_dir, "../src/templates/template.md")
+
     try:
         if not os.path.exists(template_fp):
             logger.error(f"Template file not found: {template_fp}")
@@ -85,32 +160,38 @@ def generate_missing() -> None:
                     pattern = r"\[\[(.*?)\]\]"
                     wikilinks = re.findall(pattern, markdown_content)
 
-                    if wikilinks:
-                        parent_dir = os.path.basename(os.path.dirname(md_fp))
-                        default_category = "articles"
-                        category = parent_dir if parent_dir != "content" else default_category
-                        category_dir = os.path.join(content_dir, category)
+                    for link in wikilinks:
+                        slug = link.replace(" ", "-").lower()
+                        filename = f"{slug}.md"
 
-                        ensure_directory(category_dir)
+                        file_found = False
+                        for content_root, _, content_files in os.walk(content_dir):
+                            if filename in content_files:
+                                file_found = True
+                                break
 
-                        for link in wikilinks:
-                            filename = f"{link.replace(' ', '-').lower()}.md"
+                        if not file_found:
+                            category = os.path.basename(root) if root != content_dir else "articles"
+                            category_dir = os.path.join(content_dir, category)
+                            ensure_directory(category_dir)
+
                             filepath = os.path.join(category_dir, filename)
 
-                            if not os.path.exists(filepath):
-                                title = link.title()
-                                frontmatter = template_content.format(
-                                    title=title,
-                                    created=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                                    last_modified=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                                )
-                                with open(filepath, "w", encoding="utf-8") as new_file:
-                                    new_file.write(frontmatter)
-                                logger.info(f"Created missing file: {filepath}")
-                            else:
-                                logger.info(f"File already exists: {filepath}")
+                            frontmatter = template_content.format(
+                                title=link.title(),
+                                created=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                                last_modified=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                            )
+
+                            with open(filepath, "w", encoding="utf-8") as new_file:
+                                new_file.write(frontmatter)
+
+                            logger.info(f"Created missing file: {filepath}")
+                        else:
+                            logger.info(f"File already exists for wikilink: {link}")
+
     except Exception as err:
-        logger.error(f"Error during generate_missing: {err}")
+        logger.error(f"Error during generate_missing: {err}", exc_info=True)
 
 
 def cleanup_orphans() -> None:

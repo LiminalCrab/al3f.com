@@ -8,6 +8,8 @@ from src.base_utils import setup_logger, ensure_directory, content_dir
 
 logger = setup_logger("markdown_parser", "logs/markdown_parser.log")
 
+BASE_PATH = "/ordinal/public"
+
 
 def markdown_output(md_fp: str, backlinks: Dict[str, List[str]]) -> None:
     try:
@@ -82,7 +84,7 @@ def parse_bold_text(md_content: str) -> str:
     return re.sub(bold_pattern, replace_bold, md_content)
 
 
-def parse_images(md_content: str, base_path: str = "./images/") -> str:
+def parse_images(md_content: str, base_path: str = "../images/") -> str:
     image_pattern = r"!\[(.*?)\]\((.*?)\)"
 
     def replace_image(match):
@@ -126,9 +128,17 @@ def parse_wikilinks(source_page: str, text: str, backlinks: Dict[str, List[str]]
         def replace_link(match):
             link_text = match.group(1)
             slug = link_text.replace(" ", "-").lower()
-            logger.info(f"Backlinks source: {source_page}, link text: {link_text}")
+
+            category = "articles"
+            for folder in ["notes", "articles"]:
+                if os.path.exists(os.path.join(content_dir, folder, f"{slug}.md")):
+                    category = folder
+                    break
+
+            logger.info(f"Backlinks source: {source_page}, link text: {link_text}, resolved to category: {category}")
             parse_backlink(source_page, link_text, backlinks)
-            return f'<a href="/{slug}.html">{link_text}</a>'
+
+            return f'<a href="{BASE_PATH}/{category}/{slug}.html">{link_text}</a>'
 
         return re.sub(pattern, replace_link, text)
     except Exception as err:

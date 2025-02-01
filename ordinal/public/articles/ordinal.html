@@ -14,9 +14,8 @@
         <img src="../images/aleph-no-background-web256x256.png" alt="An image of an abstract Hebrew Alef">
         <nav>
             <ul>
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="articles.html">Articles</a></li>
-                <li><a href="../notes/notes.html">Notes</a></li>
+                <li><a href="/ordinal/public/index.html">Home</a></li>
+                <li><a href="/ordinal/public/articles/articles.html">Articles</a></li>
             </ul>
         </nav>
     </header>
@@ -39,11 +38,11 @@
             <div class="meta-section">
                 
                 <a href="" class="meta-link">
-                    <span class="label">Modified:</span> 2025-01-14 13:04:06
+                    <span class="label">Modified:</span> 2025-01-30 11:49:56
                 </a>
                 
                 <a href="" class="meta-link">
-                    <span class="label">Worked:</span> 0.0h
+                    <span class="label">Worked:</span> N/A
                 </a>
                 
             </div>
@@ -55,8 +54,29 @@
             <h2>Contents</h2>
             <ul>
                 
+                <li class="toc-item toc-level-2">
+                    <a href="#ordinal">Ordinal</a>
+                </li>
+                
             </ul>
         </aside>
+        
+        <article>
+            <header>
+                <h2 id="ordinal">Ordinal</h2>
+            </header>
+            <section>
+                
+                <p>Ordinal is a static site generator designed for <strong>speed</strong>, <strong>reliability</strong>, and <strong>accessibility</strong>. It is written in Python and generates a structured, interlinked wiki from Markdown without dependencies beyond a standard POSIX environment. The system is optimized for offline use, requires no JavaScript and relying entirely on static assets.</p>
+                
+                <p>The generator handles wikilinks, backlinks, frontmatter metadata, and template-driven rendering, ensuring that every document is self-contained and properly linked. Markdown files are automatically converted into structured HTML pages, while the directory layout is preserved in the output.</p>
+                
+                <p>Ordinal enforces link correctness, resolving all internal references at build time. Broken links are automatically detected and resolved, with missing pages generated as placeholders. The system tracks backlinks dynamically, ensuring that referenced pages always display their incoming links.</p>
+                
+                <p>The build process is atomic. Each regeneration ensures that stale content is never served, with last-modified timestamps enforcing strict reprocessing when Markdown files or templates change. Navigation is deterministic, with all internal links resolving relative to `/ordinal/public/`</p>
+                
+            </section>
+        </article>
         
     </main>
 
@@ -68,15 +88,21 @@
         <h2>Related Articles</h2>
         <ul>
             
+            <li><a href="/articles/articles.html">Articles</a></li>
+            
             <li><a href="/articles/places.html">Places</a></li>
             
-            <li><a href="/articles/wikilinks.html">Wikilinks</a></li>
+            <li><a href="/articles/unreal-engine.html">Unreal Engine</a></li>
+            
+            <li><a href="/articles/merveilles.html">Merveilles</a></li>
             
             <li><a href="/articles/ordinal.html">Ordinal</a></li>
             
-            <li><a href="/articles/heavy-metal.html">Heavy-Metal</a></li>
+            <li><a href="/articles/unity.html">Unity</a></li>
             
-            <li><a href="/articles/seraph.html">Seraph</a></li>
+            <li><a href="/articles/creations.html">Creations</a></li>
+            
+            <li><a href="/articles/source-engine-2.html">Source Engine 2</a></li>
             
         </ul>
         <h2>Referenced By</h2>
@@ -89,7 +115,7 @@
     
 
 
-    
+
 
     <footer>
         <p>&copy; 2025 Aleph.</p>

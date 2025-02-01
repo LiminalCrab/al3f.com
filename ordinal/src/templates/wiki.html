@@ -14,9 +14,8 @@
         <img src="../images/aleph-no-background-web256x256.png" alt="An image of an abstract Hebrew Alef">
         <nav>
             <ul>
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="articles.html">Articles</a></li>
-                <li><a href="../notes/notes.html">Notes</a></li>
+                <li><a href="{{ base_url }}index.html">Home</a></li>
+                <li><a href="{{ base_url }}articles/articles.html">Articles</a></li>
             </ul>
         </nav>
     </header>
@@ -100,16 +99,7 @@
     {% endif %}
 
 
-    {% if external_links %}
-    <section class="external-links">
-        <h2>External References</h2>
-        <ul>
-            {% for link in external_links %}
-            <li><a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.text }}</a></li>
-            {% endfor %}
-        </ul>
-    </section>
-    {% endif %}
+
 
     <footer>
         <p>&copy; 2025 Aleph.</p>

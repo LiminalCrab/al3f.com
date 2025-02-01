@@ -2,14 +2,16 @@
 title: Creations
 description: "This page is under construction."
 division: ["Writing"]
-domain: "Writing"
+domain: "Unknown"
 worked: "0.0h"
-created: 2025-01-14 13:04:06
-last_modified: 2025-01-14 13:04:06
-template: wiki.html
-
+created: 2025-01-31 00:48:12
+last_modified: 2025-01-31 00:48:12
+template: "wiki.html"
 ---
 
-# Creations
+## Creations
 
-*This page is currently empty. Content will be added soon.*
+This page will serve as a hub for my projects, experiments, and creative works—whether in software, game development, design, or other mediums. While it's currently empty, content will be added soon.
+
+## 404
+This is technically your 404 page.
