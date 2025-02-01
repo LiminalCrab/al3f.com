@@ -67,7 +67,7 @@ def get_articles_list() -> list:
                 last_modified = frontmatter.get("last_modified", "Unknown")
                 domain = frontmatter.get("domain", "Unknown")
                 division = frontmatter.get("division", "Unknown")
-                url = f"../articles/{file.replace('.md', '.html')}"
+                url = f"/articles/{file.replace('.md', '.html')}"
                 articles_list.append(
                     {"title": title, "url": url, "last_modified": last_modified, "domain": domain, "division": division}
                 )
