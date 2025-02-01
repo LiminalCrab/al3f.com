@@ -13,19 +13,25 @@ template: "wiki.html"
 
 This page serves as a gateway to all my notes and entries on my travels, where I’ve been, and my experiences in these places. While it’s currently empty, I’ll be adding insights, memories, and observations over time.
 
-[[Ukraine]]
+[[Ukraine]] - Spring 2019 - Winter 2019
 - [[Kyiv]]
 - [[Chernobyl]]
-[[Japan]]
+[[Japan]] - 2014 - 2016
 - [[Tokyo]]
-[[Italy]]
+[[Italy]] - 2017 - 2019
 - [[Venice]]
 - [[Florence]]
 - [[Naples]]
 - [[Rome]]
-[[Malta]]
-[[England]]
+[[Malta]] - 2018
+[[England]] - 2018
 - [[London]]
+[[Canada]] - 2022
+- [[Vancouver]]
+- [[Mystic Beach]]
+[[United States]]
+- [[Oregon]]
+- [[Washington]]
 
 
 ## 404

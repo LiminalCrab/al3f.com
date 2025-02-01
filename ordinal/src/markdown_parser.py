@@ -8,8 +8,6 @@ from src.base_utils import setup_logger, ensure_directory, content_dir
 
 logger = setup_logger("markdown_parser", "logs/markdown_parser.log")
 
-BASE_PATH = "/ordinal/public"
-
 
 def markdown_output(md_fp: str, backlinks: Dict[str, List[str]]) -> None:
     try:
@@ -138,7 +136,7 @@ def parse_wikilinks(source_page: str, text: str, backlinks: Dict[str, List[str]]
             logger.info(f"Backlinks source: {source_page}, link text: {link_text}, resolved to category: {category}")
             parse_backlink(source_page, link_text, backlinks)
 
-            return f'<a href="{BASE_PATH}/{category}/{slug}.html">{link_text}</a>'
+            return f'<a href="/{category}/{slug}.html">{link_text}</a>'
 
         return re.sub(pattern, replace_link, text)
     except Exception as err:

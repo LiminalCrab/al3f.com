@@ -115,7 +115,6 @@ def process_file(md_fp: str, output_fp: str, default_template: str, backlinks: d
                 },
                 {"label": "Division", "value": ", ".join(frontmatter.get("division", []))},
             ],
-            "base_url": "/ordinal/public/",
             "content": footnotes_content,
             "articles": articles.get("articles", []),
             "footnotes": footnotes,
