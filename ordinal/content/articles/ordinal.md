@@ -10,7 +10,7 @@ template: "wiki.html"
 ---
 
 ## Ordinal
-![Ordinal's Icon](../images/128ordinal.png)
+![Ordinal's Icon](../images/512ordinal.png)
 This page is an early draft. More details about its architecture, features, and implementation will be added over time.
 
 Ordinal is a static site generator designed for **speed**, **reliability**, and **accessibility**. It is written in Python and generates a structured, interlinked wiki from Markdown without dependencies beyond a standard POSIX environment. The system is optimized for offline use, requires no JavaScript and relying entirely on static assets.
