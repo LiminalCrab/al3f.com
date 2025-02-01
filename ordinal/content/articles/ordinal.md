@@ -1,15 +1,16 @@
 ---
 title: Ordinal
-description: "This page is under construction."
+description: "A boundless engine for structured thought."
 division: ["Code"]
 domain: "Development"
-worked: "0.0h"
+worked: 73.5
 created: 2025-01-30 11:49:56
 last_modified: 2025-01-30 11:49:56
 template: "wiki.html"
 ---
 
 ## Ordinal
+![Ordinal's Icon](../images/128ordinal.png)
 This page is an early draft. More details about its architecture, features, and implementation will be added over time.
 
 Ordinal is a static site generator designed for **speed**, **reliability**, and **accessibility**. It is written in Python and generates a structured, interlinked wiki from Markdown without dependencies beyond a standard POSIX environment. The system is optimized for offline use, requires no JavaScript and relying entirely on static assets.
