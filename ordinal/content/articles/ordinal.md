@@ -1,8 +1,8 @@
 ---
 title: Ordinal
 description: "This page is under construction."
-division: ["Writing"]
-domain: "Unknown"
+division: ["Code"]
+domain: "Development"
 worked: "0.0h"
 created: 2025-01-30 11:49:56
 last_modified: 2025-01-30 11:49:56

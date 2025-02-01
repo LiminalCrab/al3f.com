@@ -27,32 +27,26 @@
 
     <main>
         <section class="articles-list">
-            {% if articles_list %}
+            {% if categorized_articles %}
+            {% for domain, articles in categorized_articles.items() %}
+            <h2 class="category-title">{{ domain }}</h2>
             <div class="article-columns">
-                {% for article in articles_list %}
+                {% for article in articles %}
                 <div class="article-entry">
                     <a href="{{ article.url }}" class="article-title">{{ article.title }}</a>
                     <div class="article-meta">
                         <p><strong>Updated:</strong> {{ article.last_modified }}</p>
-
-                        {% if article.domain %}
-                        <p><strong>Domain:</strong> {{ article.domain }}</p>
-                        {% endif %}
-
-                        {% if article.division %}
                         <p><strong>Division:</strong> {{ article.division | join(', ') }}</p>
-                        {% endif %}
-
                     </div>
                 </div>
                 {% endfor %}
             </div>
+            {% endfor %}
             {% else %}
             <p>No articles found.</p>
             {% endif %}
         </section>
     </main>
-
     <footer>
         <p>&copy; 2025 Aleph.</p>
     </footer>

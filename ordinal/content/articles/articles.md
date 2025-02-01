@@ -1,8 +1,8 @@
 ---
 title: Articles
 description: "All Articles"
-division: ["Writing"]
-domain: "Unknown"
+division: ["Meta"]
+domain: "Meta"
 worked: "0.0h"
 created: 2025-01-30 11:06:37
 last_modified: 2025-01-30 11:06:37

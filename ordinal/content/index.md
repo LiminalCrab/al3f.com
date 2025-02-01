@@ -4,8 +4,8 @@ description: "Formless and Empty"
 division: ["Writing"]
 domain: "Meta"
 worked: 6.5
-last_modified: "2025-01-05"
-created: "2025-01-01"
+last_modified: 2025-02-01
+created: 2025-01-01
 ---
 
 ## Introduction

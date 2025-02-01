@@ -2,7 +2,7 @@
 title: Merveilles
 description: "Achromatic, Decentralized, and Federated"
 division: ["Writing"]
-domain: "Unknown"
+domain: "Social"
 worked: 1.9
 created: 2025-01-16 11:49:56
 last_modified: 2025-01-30 11:49:56

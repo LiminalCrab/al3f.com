@@ -5,6 +5,7 @@ from src.file_manager import get_categories, generate_missing, merge_image_dir
 from src.markdown_parser import parse_frontmatter, parse_related, parse_footnotes, parse_articles
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 import subprocess
+from collections import defaultdict
 
 
 logger = setup_logger("html_renderer", "logs/html_renderer.log")
@@ -52,9 +53,9 @@ def render_template_context(template_name: str, context: dict) -> str:
     return ""
 
 
-def get_articles_list() -> list:
+def get_articles_list() -> dict:
     articles_dir = os.path.join(content_dir, "articles")
-    articles_list = []
+    categorized_articles = defaultdict(list)
 
     if os.path.exists(articles_dir):
         for file in os.listdir(articles_dir):
@@ -65,14 +66,18 @@ def get_articles_list() -> list:
 
                 title = frontmatter.get("title", file.replace(".md", "").replace("-", " ").title())
                 last_modified = frontmatter.get("last_modified", "Unknown")
-                domain = frontmatter.get("domain", "Unknown")
-                division = frontmatter.get("division", "Unknown")
+                domain = frontmatter.get("domain", "Miscellaneous")
+                division = frontmatter.get("division", [])
                 url = f"/articles/{file.replace('.md', '.html')}"
-                articles_list.append(
+
+                categorized_articles[domain].append(
                     {"title": title, "url": url, "last_modified": last_modified, "domain": domain, "division": division}
                 )
 
-    return sorted(articles_list, key=lambda x: x["last_modified"], reverse=True)
+    return {
+        domain: sorted(articles, key=lambda x: x["last_modified"], reverse=True)
+        for domain, articles in sorted(categorized_articles.items())
+    }
 
 
 def process_file(md_fp: str, output_fp: str, default_template: str, backlinks: dict) -> None:
@@ -125,7 +130,7 @@ def process_file(md_fp: str, output_fp: str, default_template: str, backlinks: d
         }
 
         if template_name == "section.html":
-            context["articles_list"] = get_articles_list()
+            context["categorized_articles"] = get_articles_list()
 
         rendered_html = render_template_context(template_name, context)
         ensure_directory(os.path.dirname(output_fp))
