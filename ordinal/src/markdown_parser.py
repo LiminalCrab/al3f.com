@@ -259,28 +259,16 @@ def parse_footnotes(content: str):
 def parse_related(frontmatter: dict) -> list[dict]:
     try:
         related = []
-        # division = frontmatter.get("division", "")
         domain = frontmatter.get("domain", "")
-
-        # if isinstance(division, str):
-        #     division = [division]
-        # elif not isinstance(division, list):
-        #     division = []
 
         if isinstance(domain, str):
             domain = [domain]
         elif not isinstance(domain, list):
             domain = []
 
-        # division = [d.lower() for d in division if isinstance(d, str)]
         domain = [d.lower() for d in domain if isinstance(d, str)]
 
-        # logger.debug(f"Looking for related articles with Division: {division}, Domain: {domain}.")
         logger.info(f"Looking for related articles with Domain: {domain}.")
-
-        # if not division and not domain:
-        #     logger.info("No Division or Domain specified in frontmatter. Returning empty list.")
-        #     return related
 
         for root, _, files in os.walk(content_dir):
             for file in files:
@@ -289,30 +277,15 @@ def parse_related(frontmatter: dict) -> list[dict]:
                     try:
                         parsed_frontmatter = parse_frontmatter(markdown_path)
                         file_frontmatter = parsed_frontmatter.get("frontmatter", {})
-                        # file_divisions = file_frontmatter.get("division", "")
                         file_domains = file_frontmatter.get("domain", "")
-
-                        # if isinstance(file_divisions, str):
-                        #     file_divisions = [file_divisions]
-                        # elif not isinstance(file_divisions, list):
-                        #     file_divisions = []
 
                         if isinstance(file_domains, str):
                             file_domains = [file_domains]
                         elif not isinstance(file_domains, list):
                             file_domains = []
 
-                        # file_divisions = [div.lower() for div in file_divisions if isinstance(div, str)]
                         file_domains = [dom.lower() for dom in file_domains if isinstance(dom, str)]
 
-                        # if set(division) & set(file_divisions):
-                        #     logger.info(f"Match found for Division in file: {markdown_path}")
-                        #     related.append(
-                        #         {
-                        #             "title": file_frontmatter.get("title", "Untitled"),
-                        #             "url": markdown_path.replace(content_dir, "").replace(".md", ".html"),
-                        #         }
-                        #     )
                         if set(domain) & set(file_domains):
                             logger.info(f"Match found for Domain in file: {markdown_path}")
                             related.append(

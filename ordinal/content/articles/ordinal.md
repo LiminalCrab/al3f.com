@@ -10,6 +10,7 @@ template: "wiki.html"
 ---
 
 ## Ordinal
+This page is an early draft. More details about its architecture, features, and implementation will be added over time.
 
 Ordinal is a static site generator designed for **speed**, **reliability**, and **accessibility**. It is written in Python and generates a structured, interlinked wiki from Markdown without dependencies beyond a standard POSIX environment. The system is optimized for offline use, requires no JavaScript and relying entirely on static assets.
 
@@ -18,3 +19,4 @@ The generator handles wikilinks, backlinks, frontmatter metadata, and template-d
 Ordinal enforces link correctness, resolving all internal references at build time. Broken links are automatically detected and resolved, with missing pages generated as placeholders. The system tracks backlinks dynamically, ensuring that referenced pages always display their incoming links.
 
 The build process is atomic. Each regeneration ensures that stale content is never served, with last-modified timestamps enforcing strict reprocessing when Markdown files or templates change. Navigation is deterministic, with all internal links resolving relative to `/ordinal/public/`
+

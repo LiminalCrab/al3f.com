@@ -15,5 +15,8 @@ This page serves as a portal to my writing on emergence, in games, software, des
 
 To me, emergence isn’t just a feature of design—it’s a fundamental principle that underlies everything from procedural storytelling to decentralized social structures. A well-crafted system doesn’t enforce order; it enables it to emerge. In games, this happens when players build narratives around mechanics rather than following a script. In software, it’s how modular tools interact to form workflows greater than the sum of their parts. Online, it’s how communities shape their own identity through self-organization rather than top-down control.
 
+You can go back to the [index](public/articles/articles.html)
+
+
 ## 404
 Until content is added, this page acts as a placeholder, essentially a 404 page within my wiki. If you arrived here expecting something more, it means I haven’t written about it yet (or I just haven’t linked the relevant entries properly). Check back later as I expand this section with detailed notes and references.

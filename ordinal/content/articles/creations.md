@@ -13,5 +13,8 @@ template: "wiki.html"
 
 This page will serve as a hub for my projects, experiments, and creative works—whether in software, game development, design, or other mediums. While it's currently empty, content will be added soon.
 
+You can go back to the [index](public/articles/articles.html)
+
+
 ## 404
 This is technically your 404 page.
