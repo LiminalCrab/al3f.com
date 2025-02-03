@@ -41,6 +41,22 @@ def markdown_output(md_fp: str, backlinks: Dict[str, List[str]]) -> None:
         logger.error(f"Error logging Markdown output for: {md_fp}: {err}")
 
 
+def parse_quotes(md_content: str) -> str:
+    quote_pattern = re.compile(r"^> (.*)", re.MULTILINE)
+    author_pattern = re.compile(r"^- (.*)", re.MULTILINE)
+
+    def replace_quote(match):
+        return f"<blockquote>{match.group(1)}</blockquote>"
+
+    def replace_author(match):
+        return f"<cite>{match.group(1)}</cite>"
+
+    md_content = quote_pattern.sub(replace_quote, md_content)
+    md_content = author_pattern.sub(replace_author, md_content)
+
+    return md_content
+
+
 def parse_tables(md_content: str) -> str:
     table_pattern = re.compile(
         r"^(\|(?:.*\|)+)\n(\|(?: *[-:]+[-| :]*)\|)\n((?:\|(?:.*\|)+\n?)*)",
@@ -82,15 +98,38 @@ def parse_bold_text(md_content: str) -> str:
     return re.sub(bold_pattern, replace_bold, md_content)
 
 
+VALID_IMAGE_EXTENSIONS = (".avif", ".bmp", ".gif", ".jpeg", ".jpg", ".png", ".svg", ".webp")
+
+
 def parse_images(md_content: str, base_path: str = "../images/") -> str:
-    image_pattern = r"!\[(.*?)\]\((.*?)\)"
+    """
+    - `![Alt Text](image.jpg)` for standard images
+    - `![Alt Text|100x200](image.jpg)` for resized image (100px width, 200px height)
+    """
+
+    image_pattern = re.compile(r"!\[(.*?)\]\((.*?)\)")
 
     def replace_image(match):
         alt_text, src = match.groups()
+
+        resize_match = re.search(r"(.*?)\|(\d+)x(\d+)", alt_text)
+
+        if resize_match:
+            alt_text = resize_match.group(1).strip()
+            width = resize_match.group(2)
+            height = resize_match.group(3)
+            size_attr = f' width="{width}" height="{height}"'
+        else:
+            size_attr = ""
+
+        if not src.lower().endswith(VALID_IMAGE_EXTENSIONS):
+            return f"<p>[Invalid image format: {src}]</p>"
+
         image_path = os.path.join(base_path, os.path.basename(src))
+
         return f"""
         <figure>
-            <img src="{image_path}" alt="{alt_text}">
+            <img src="{image_path}" alt="{alt_text}"{size_attr}>
             <figcaption>{alt_text}</figcaption>
         </figure>
         """
@@ -167,6 +206,7 @@ def parse_articles(md_content: str, page_name: str, backlinks: Dict[str, List[st
 
     try:
         processed_content, footnotes = parse_footnotes(md_content)
+        processed_content = parse_quotes(processed_content)
         processed_content = parse_images(processed_content)
         processed_content = parse_bold_text(processed_content)
         processed_content = parse_italics(processed_content)

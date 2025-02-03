@@ -25,7 +25,7 @@ $toc-text-color: $text-color;
 
 // Content Layout
 $content-max-width: 110ch;
-$content-line-height: 1.85;
+$content-line-height: 2;
 $content-padding: 2.5rem;
 
 // Typography
@@ -53,7 +53,7 @@ $footnote-link-hover-bg-color: $link-hover-bg-color;
 }
 
 body {
-    font-family: "Georgia", serif;
+    font-family: serif;
     background-color: $background-color;
     color: $text-color;
     display: flex;
@@ -113,52 +113,97 @@ header#site-banner {
 
 
 .toc {
-    float: left;
-    width: 20%;
-    margin-right: 1rem;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 250px;
+    height: 100vh;
+    background-color: $background-color;
+    color: $text-color;
     padding: 1rem;
-    background-color: #111;
-    border: 1px solid #fff;
-    font-size: 0.875rem;
-    color: #fff;
-    max-height: 80vh;
     overflow-y: auto;
-    min-height: 2rem;
+    border-right: 2px solid $accent-color;
+    font-family: monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
 
     h2 {
-        font-size: 1.25rem;
-        margin-bottom: 1rem;
+        font-size: 1rem;
+        font-weight: bold;
         text-transform: uppercase;
+        margin-bottom: 0.8rem;
+        border-bottom: 1px solid $accent-color;
+        padding-bottom: 0.5rem;
     }
 
     ul {
-        list-style: decimal;
-        padding: 0 1.5rem;
+        list-style: none;
+        padding-left: 0;
 
         .toc-item {
-            margin-bottom: 0.5rem;
+            display: block;
+            padding: 0.2rem 0;
+            transition: background 0.2s ease-in-out;
 
-            &.toc-level-2 {
-                font-weight: bold;
-            }
-
-            &.toc-level-3 {
-                padding-left: 1rem;
+            &:hover {
+                background: rgba(255, 255, 255, 0.1);
             }
 
             a {
-                border-bottom: 1px dotted #fff;
+                color: $text-color;
+                text-decoration: none;
+                display: block;
+                padding: 0.2rem 0.5rem;
+                transition: color 0.2s;
+
+                &:hover {
+                    color: $link-hover-color;
+                }
+            }
+
+            &.toc-level-1 {
+                font-weight: bold;
+                padding-left: 0rem;
+            }
+
+            &.toc-level-2 {
+                padding-left: 1rem;
+            }
+
+            &.toc-level-3 {
+                padding-left: 2rem;
+            }
+
+            &.toc-level-4 {
+                padding-left: 3rem;
             }
         }
     }
 
     .toc-empty {
-        text-align: center;
         font-style: italic;
-        color: #888;
+        color: $accent-color;
+        text-align: center;
     }
 }
 
+blockquote {
+    font-style: italic;
+    font-size: 1.5rem;
+    border-left: 4px solid #999;
+    padding-left: 16px;
+    margin: 1em 0;
+    color: #555;
+}
+
+cite {
+    display: block;
+    font-size: 1.2rem;
+    text-align: left;
+    font-style: normal;
+    color: #333;
+    margin-top: 2px;
+}
 
 /* ========================== */
 /*      MAIN CONTENT         */
@@ -169,6 +214,13 @@ main {
     margin: 0 auto;
     padding: 2rem;
     text-align: left;
+
+    h1,
+    h2,
+    h3 {
+        letter-spacing: 0.05rem;
+        font-weight: 600;
+    }
 
     h2 {
         font-size: 2rem;
@@ -189,8 +241,9 @@ main {
     p {
         font-size: 1.6rem;
         line-height: $content-line-height;
-        margin-bottom: 1.75rem;
-        text-indent: 2.5rem;
+        margin-bottom: 2rem;
+        word-spacing: 0.05rem;
+        text-indent: 2rem;
         text-align: justify;
         hyphens: auto;
     }
@@ -427,6 +480,7 @@ figure {
     }
 }
 
+
 .page-details {
     text-align: center;
     margin-bottom: 3rem;
@@ -603,17 +657,29 @@ table {
     }
 }
 
-@media (max-width: 768px) {
-    .toc {
-        width: 100%;
-        margin: 0;
-        padding: 1rem;
-        border: none;
-        text-align: center;
-        max-height: unset;
-    }
+// @media (max-width: 768px) {
+//     .toc {
+//         width: 100%;
+//         margin: 0;
+//         padding: 1rem;
+//         border: none;
+//         text-align: center;
+//         max-height: unset;
+//     }
 
-    .toc ul {
-        padding: 0;
+//     .toc ul {
+//         padding: 0;
+//     }
+// }
+
+@media (max-width: 1024px) {
+    .toc {
+        position: relative;
+        width: 100%;
+        height: auto;
+        max-height: 300px;
+        border-right: none;
+        border-bottom: 2px solid $accent-color;
+        overflow-y: auto;
     }
 }

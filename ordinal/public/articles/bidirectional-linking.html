@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A portal to what I've worked on.">
-    <title>Creations</title>
+    <meta name="description" content="Two-way connected hyerplinks">
+    <title>Bidirectional Linking</title>
     <link rel="stylesheet" href="../styles/main.css">
 </head>
 
@@ -21,8 +21,8 @@
     </header>
 
     <section class="page-details">
-        <h2 class="page-title">Creations</h2>
-        <p class="page-description">A portal to what I've worked on.</p>
+        <h2 class="page-title">Bidirectional Linking</h2>
+        <p class="page-description">Two-way connected hyerplinks</p>
         <div class="page-meta">
             <div class="meta-section">
                 
@@ -31,14 +31,14 @@
                 </div>
                 
                 <div class="meta-item">
-                    <span class="label">Division:</span> Meta
+                    <span class="label">Division:</span> Writing
                 </div>
                 
             </div>
             <div class="meta-section">
                 
                 <div class="meta-item">
-                    <span class="label">Modified:</span> 2025-01-31 00:48:12
+                    <span class="label">Modified:</span> 2025-02-02 02:29:36
                 </div>
                 
                 <div class="meta-item">
@@ -56,11 +56,7 @@
             <ul>
                 
                 <li class="toc-item toc-level-2">
-                    <a href="#creations">Creations</a>
-                </li>
-                
-                <li class="toc-item toc-level-2">
-                    <a href="#404">404</a>
+                    <a href="#bidirectional-linking">Bidirectional Linking</a>
                 </li>
                 
             </ul>
@@ -68,22 +64,25 @@
         
         <article>
             <header>
-                <h2 id="creations">Creations</h2>
+                <h2 id="bidirectional-linking">Bidirectional Linking</h2>
             </header>
             <section>
                 
-                <p>This page will serve as a hub for my projects, experiments, and creative works—whether in software, game development, design, or other mediums. While it's currently empty, content will be added soon.</p>
+                <p>Most links on the web are one-way. Page A links to Page B, but Page B has no idea that Page A exists. This is how standard hyperlinks work. References go forward, never backward.</p>
                 
-            </section>
-        </article>
-        
-        <article>
-            <header>
-                <h2 id="404">404</h2>
-            </header>
-            <section>
+                <p>Bidirectional links work differently. If Page A links to Page B, Page B automatically links back to Page A. This creates a two-way connection, making it easier to track relationships between linked content.</p>
                 
-                <p>Until content is added, this page acts as a placeholder, essentially a 404 page within my wiki. If you arrived here expecting something more, it means I haven’t written about it yet (or I just haven’t linked the relevant entries properly).</p>
+                <p>Bidirectional links keep ideas connected without needing to manually track references. This makes it easier to see how different thoughts, notes, and pages relate to each other.</p>
+                
+                <p>When I used Vimwiki, every link I made was one-directional unless I manually added a backlink. This meant that if I referenced an idea in another note, I had to remember to update the original note with a return link, or it would be lost in a growing collection of pages.</p>
+                
+                <p>Dendron in VS Code was different. It automatically displayed backlinks in a sidebar, showing me everywhere a note was referenced without extra effort. It was a massive improvement. Unfortunately, Dendron is no longer actively developed, so I moved to Obsidian, which does the same thing, link a note, and it will track that connection from both sides.</p>
+                
+                <p>I made sure to support automatic bidirectional linking. If an entry links to another, that linked entry will also display its backlinks. This keeps everything connected, making it easier to navigate ideas without manually maintaining links.</p>
+                
+                <p><a href="https://screensresearchhypertext.com/A-Brief-History-of-Hypertext?stackedPages=%2FBidirectional-Links" target="_blank">Source</a></p>
+                
+                <p>See: <a href="/articles/hypertext.html">hypertext</a></p>
                 
             </section>
         </article>

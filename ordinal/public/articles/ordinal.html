@@ -15,7 +15,7 @@
         <nav>
             <ul>
                 <li><a href="/index.html">Home</a></li>
-                <li><a href="/articles/articles.html">Articles</a></li>
+                <li><a href="/articles/articles.html">Entries</a></li>
             </ul>
         </nav>
     </header>
@@ -26,32 +26,33 @@
         <div class="page-meta">
             <div class="meta-section">
                 
-                <a href="" class="meta-link">
+                <div class="meta-item">
                     <span class="label">Domain:</span> Development
-                </a>
+                </div>
                 
-                <a href="" class="meta-link">
+                <div class="meta-item">
                     <span class="label">Division:</span> Code
-                </a>
+                </div>
                 
             </div>
             <div class="meta-section">
                 
-                <a href="" class="meta-link">
+                <div class="meta-item">
                     <span class="label">Modified:</span> 2025-01-30 11:49:56
-                </a>
+                </div>
                 
-                <a href="" class="meta-link">
+                <div class="meta-item">
                     <span class="label">Worked:</span> 73.5h
-                </a>
+                </div>
                 
             </div>
         </div>
     </section>
 
+
     <main>
         <aside class="toc">
-            <h2>Contents</h2>
+            <h2>Outline</h2>
             <ul>
                 
                 <li class="toc-item toc-level-2">
@@ -77,13 +78,11 @@
                 
                 <p>This page is an early draft. More details about its architecture, features, and implementation will be added over time.</p>
                 
-                <p>Ordinal is a static site generator designed for <strong>speed</strong>, <strong>reliability</strong>, and <strong>accessibility</strong>. It is written in Python and generates a structured, interlinked wiki from Markdown without dependencies beyond a standard POSIX environment. The system is optimized for offline use, requires no JavaScript and relying entirely on static assets.</p>
+                <p>Ordinal is a static site generator. It is written in Python and generates a structured, interlinked wiki from Markdown with little dependencies. The application is optimized for offline use, requires no JavaScript and relying entirely on static assets.</p>
                 
                 <p>The generator handles wikilinks, backlinks, frontmatter metadata, and template-driven rendering, ensuring that every document is self-contained and properly linked. Markdown files are automatically converted into structured HTML pages, while the directory layout is preserved in the output.</p>
                 
                 <p>Ordinal enforces link correctness, resolving all internal references at build time. Broken links are automatically detected and resolved, with missing pages generated as placeholders. The system tracks backlinks dynamically, ensuring that referenced pages always display their incoming links.</p>
-                
-                <p>The build process is atomic. Each regeneration ensures that stale content is never served, with last-modified timestamps enforcing strict reprocessing when Markdown files or templates change. Navigation is deterministic, with all internal links resolving relative to `/ordinal/public/`</p>
                 
             </section>
         </article>
@@ -95,16 +94,16 @@
 
     
     <section class="related-articles">
+        <h2>Backlinks</h2>
+        <ul>
+            
+            <li><a href="/index.html">index</a></li>
+            
+        </ul>
         <h2>Related Articles</h2>
         <ul>
             
             <li><a href="/articles/ordinal.html">Ordinal</a></li>
-            
-        </ul>
-        <h2>Referenced By</h2>
-        <ul>
-            
-            <li><a href="/index.html">index</a></li>
             
         </ul>
     </section>

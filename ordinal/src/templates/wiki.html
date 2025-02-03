@@ -15,7 +15,7 @@
         <nav>
             <ul>
                 <li><a href="/index.html">Home</a></li>
-                <li><a href="/articles/articles.html">Articles</a></li>
+                <li><a href="/articles/articles.html">Entries</a></li>
             </ul>
         </nav>
     </header>
@@ -26,24 +26,25 @@
         <div class="page-meta">
             <div class="meta-section">
                 {% for meta in page_meta if meta.label in ["Domain", "Division"] %}
-                <a href="{{ meta.url }}" class="meta-link">
+                <div class="meta-item">
                     <span class="label">{{ meta.label }}:</span> {{ meta.value }}
-                </a>
+                </div>
                 {% endfor %}
             </div>
             <div class="meta-section">
                 {% for meta in page_meta if meta.label in ["Modified", "Worked"] %}
-                <a href="{{ meta.url }}" class="meta-link">
+                <div class="meta-item">
                     <span class="label">{{ meta.label }}:</span> {{ meta.value }}
-                </a>
+                </div>
                 {% endfor %}
             </div>
         </div>
     </section>
 
+
     <main>
         <aside class="toc">
-            <h2>Contents</h2>
+            <h2>Outline</h2>
             <ul>
                 {% for item in toc %}
                 <li class="toc-item toc-level-{{ item.level }}">
@@ -83,16 +84,16 @@
 
     {% if related_articles %}
     <section class="related-articles">
+        <h2>Backlinks</h2>
+        <ul>
+            {% for backlink in backlinks %}
+            <li><a href="/{{ backlink | replace(' ', '-') | lower }}.html">{{ backlink }}</a></li>
+            {% endfor %}
+        </ul>
         <h2>Related Articles</h2>
         <ul>
             {% for article in related_articles %}
             <li><a href="{{ article['url'] }}">{{ article['title'] }}</a></li>
-            {% endfor %}
-        </ul>
-        <h2>Referenced By</h2>
-        <ul>
-            {% for backlink in backlinks %}
-            <li><a href="/{{ backlink | replace(' ', '-') | lower }}.html">{{ backlink }}</a></li>
             {% endfor %}
         </ul>
     </section>

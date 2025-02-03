@@ -1,6 +1,6 @@
 ---
-title: Articles
-description: "All Articles"
+title: Entries
+description: "All Entries"
 division: ["Meta"]
 domain: "Meta"
 worked: "0.0h"
