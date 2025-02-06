@@ -1,6 +1,6 @@
 ---
 title: Ordinal
-description: "A boundless engine for structured thought."
+description: "A boundless engine for structured thought and other pretentiousness"
 division: ["Code"]
 domain: "Development"
 worked: 73.5

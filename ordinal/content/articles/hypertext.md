@@ -12,8 +12,4 @@ template: "wiki.html"
 ## Hypertext
 This is a work in progress.
 
-Hypertext isn’t just about linking pages—it’s about writing that moves in any direction, following the way thoughts actually connect. Instead of being forced into a linear structure, ideas branch, reference, and evolve.
-
-Traditional writing expects a beginning, middle, and end. Hypertext rejects that. It treats text as something fluid, where connections matter more than order. One idea leads to another, and meaning comes not just from what’s written, but from how it relates to everything else.
-
 [Source](https://screensresearchhypertext.com/)
